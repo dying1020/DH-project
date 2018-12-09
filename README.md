@@ -1,2 +1,2 @@
 # DH-project
-2019 Spring Digital Humanities project
+2019 Digital Humanities project
