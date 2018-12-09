@@ -1,2 +1,2 @@
 # DH-project
-2019 Digital Humanities project
+NTU 2018 Fall Digital Humanities project
