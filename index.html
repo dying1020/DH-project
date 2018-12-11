@@ -207,10 +207,24 @@ function Corpus(name, db, corpus) {
 }
 //--	3.Entry Object : The unit of the stored context-entry.
 function Entry(content, timeInfo) {
-	this.content = content;
-	this.time = getTime(timeInfo);
-	this.year = this.time.split(" ")[0];
-	
+	//var tmp = content.match(/<[^> ]+[^>]*>[^<]*/g);
+	//this.content = content.split("</")[1];
+    if(content.includes('<')){
+        var tag_start = content.indexOf('<');
+        var tag_end = content.indexOf('>');
+        var content_end = content.indexOf('</');
+        this.anchar = content.substr(tag_start+1, tag_end-tag_start-1);
+        this.content = content.substr(tag_end+1, content_end-tag_end-1);
+	} else {
+		this.anchar = "Udef_default_anchar";
+        this.content = content        
+    }
+
+    //this.time = getTime(timeInfo);
+    this.year = timeInfo.dateAdYear; // 以後要拿掉
+    this.time = this.anchar;
+    
+	/*
 	function getTime(timeInfo) {
 		
 		if(timeInfo.timeseqNotAfter != undefined && timeInfo.timeseqNotBefore != undefined ) {
@@ -235,7 +249,8 @@ function Entry(content, timeInfo) {
 			day = timeInfo.dateAdDate.substr(timeInfo.dateAdDate.length - 2);
 			return year + " m" + month + " d" + day;
 		}
-	}
+
+	}*/
 }
 //--	4.YearBlock Object : The unit of the stored context-year.
 function YearBlock(title, entrys, year) {
@@ -311,8 +326,6 @@ function Target(year, month, day, $timeArray) {
 }
 //--    6.Saver Object : Used to control the bookcase save issue from DocuSky.
 function Saver() {
-
-
 	this.category = 'TextJuxtaposition';
 	this.datapath = 'Saver';
 	this.fileName  = 'Bookcases';
@@ -760,6 +773,7 @@ $(document).ready(function() {
                         //*										  *
                         //*										  *
                         //*****************************************
+/*                      
 function displayQueryDocList(channelKey) {
     queryReadyCount ++;
 
@@ -824,7 +838,7 @@ function displayQueryDocList(channelKey) {
         buildYearAnalysis();
     }
 }
-
+*/
 //--    build book panel by corpus
 function corpusToBookcase(corpus) {
 
@@ -855,31 +869,64 @@ function buildCorpus(docList) {
 	var yearCandidate = [];
 	
 	var temp = [];
-	
-	for(var i = 0; i < docList.length; i ++) {
-	//--	有沒有專屬的time
-		var entry = new Entry(docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", ""), docList[i].docInfo.timeInfo);
-		
-		if(docList[i].docInfo.timeInfo.dateChNormYear != judge) {
-			var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp, findMaxyearCandidateAdd(yearCandidate));
-			corpus.yearBlocks.push(yearBlock);
-			
-			judge = docList[i].docInfo.timeInfo.dateChNormYear;
-			temp = [];
-			temp.push(entry);
-			yearCandidate = []
-			yearCandidate[ entry.year ] = 1;
-		} else {
-			if(yearCandidate[entry.year]) {
-				yearCandidate[entry.year] += 1;
-			} else {
-				yearCandidate[entry.year] = 1;
-			}
-			temp.push(entry);
-		}
-	}
-	return corpus;
-	
+
+    for(var i = 0; i < docList.length; i ++) {
+    //--    有沒有專屬的time
+        var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "");
+        var timeinfo = docList[i].docInfo.timeInfo;
+        
+        while(content.trim().length>1){
+            content = content.trim();
+            var entry_content = 0;
+            if(content.indexOf('<') != 0){
+                if(content.includes('<')){
+                    var tag_start = content.indexOf('<');
+                    entry_content = content.substr(0, tag_start-1);
+                    content = content.substr(tag_start, content.length-tag_start);
+                }else{ 
+                   	entry_content = content;
+                   	content = "";
+                }
+            }else{
+                var tag_start = content.indexOf('<');
+                var tag_end = nthIndex(content, '>', 2);
+                entry_content = content.substr(tag_start, tag_end-tag_start-1);
+                content = content.substr(tag_end+1, content.length-tag_end);
+                entry_content = String(content.trim().length) + entry_content;
+            }
+            var entry = new Entry(entry_content,timeinfo);                     
+                
+            if(docList[i].docInfo.timeInfo.dateChNormYear != judge) {
+                var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp, findMaxyearCandidateAdd(yearCandidate));
+                corpus.yearBlocks.push(yearBlock);
+                
+                judge = docList[i].docInfo.timeInfo.dateChNormYear;
+                temp = [];
+                temp.push(entry);
+                yearCandidate = []
+                yearCandidate[ entry.year ] = 1;
+            } else {
+                if(yearCandidate[entry.year]) {
+                    yearCandidate[entry.year] += 1;
+                } else {
+                    yearCandidate[entry.year] = 1;
+                }
+                temp.push(entry);
+            }
+        }
+    }
+    return corpus;
+
+    // find n-th pat
+    function nthIndex(str, pat, n){
+        var L= str.length, i= -1;
+        while(n-- && i++<L){
+            i= str.indexOf(pat, i);
+            if (i < 0) break;
+        }
+        return i;
+    }
+
 	
 	function findMaxyearCandidateAdd(yearCandidate) {
 	var max = 0;
