@@ -1,0 +1,1172 @@
+<!doctype html>
+<html>
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109249169-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-109249169-1');
+</script>
+
+	<title>文本對讀系統</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+	<!-- <script src="http://docusky.digital.ntu.edu.tw/docusky/js.ui/docusky.ui.getDbCorpusDocumentsSimpleUI.js"></script> -->
+	<!-- <script src="http://docusky.digital.ntu.edu.tw/docusky/js.ui/docusky.ui.manageDataFileListSimpleUI.js"></script> -->
+	<!-- DH project -->
+    <script src="docusky/js.ui/docusky.ui.getDbCorpusDocumentsSimpleUI.js"></script>
+	<script src="docusky/js.ui/docusky.ui.manageDataFileListSimpleUI.js"></script>
+   
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   
+   
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/main.css" rel="stylesheet">
+	<link href="css/index.css" rel="stylesheet">
+	
+	<!-- myFunction -->
+	
+
+</head>
+
+
+<script>
+                        //*****************************************
+                        //*										  *
+                        //*										  *
+                        //*			     Object Declar			  *
+                        //*										  *
+                        //*										  *
+                        //*****************************************
+
+//--    1.Layout Object : Used to adjust the layout and some control of input from DocuSky.
+function Layout() {
+	this.height = window.innerHeight-135;
+	
+	//*****************************************
+	//*										  *
+	//*										  *
+	//*				  panel build			  *
+	//*										  *
+	//*										  *
+	//*****************************************
+	
+    this.adjustPanelByWindowSize = function() {
+        this.height = window.innerHeight-135;
+	    $('#classificationTable').height(this.height + 60);
+        var temp = $('.nav-sidebar');
+        for(var i = 0; i < temp.length; i ++) {
+            $(temp[i]).height(this.height);
+        }
+        $('#querySidebar').height(this.height + 60);
+    }
+	//--	create book container
+	this.createBookContainer = function(corpusName) {
+		var bookContainer = "<div class='book col-sm-12 content'><h1 class='page-header' style='font-size:24px'>" 
+		+ corpusName + "</h1><ul class='nav nav-sidebar' style='width:100%;height:" 
+		+ this.height + "px;overflow-x:auto;overflow-y:auto;'></ul></div>"
+		
+		return bookContainer;
+	};
+	
+	//--	create book panel
+	this.createBookPanel = function(yearBlockTitle, yearBlockYear ) {
+		var panelHeading = "<div class='panel panel-default block " 
+		+ yearBlockTitle + " " + yearBlockYear + "' name='" + yearBlockTitle 
+		+ "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" 
+		+ yearBlockTitle + "</div></div>";
+			
+		return panelHeading;
+	};
+	
+	this.createBookListGroup = function() {
+		var groupList = document.createElement("div");
+		groupList.className = "list-group";
+		
+		return groupList;
+	};
+	
+	this.createBookListGroupItem = function(entryTime, entryContent) {
+		var groupItem = "<a href='# " + entryTime + "' class='list-group-item text " + entryTime 
+		+ "' onclick='moveAnchor(event)' >" + entryContent + "</a>";
+		
+		return groupItem;
+	};
+	
+	this.addBookCheckBox = function(corpusName) {
+		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
+		+ corpusName + "</label>");
+	};
+	
+	
+	
+	//*****************************************
+	//*										  *
+	//*										  *
+	//*				  action				  *
+	//*										  *
+	//*										  *
+	//*****************************************
+	
+	//--	change the background color for hit entry
+	this.changeHitEntryColor = function($targetArray) {
+		for(var i = 0; i < $targetArray.length; i ++) {
+			$($targetArray[i]).attr("style", "background-color:palegoldenrod");
+			$($targetArray[i]).attr("class", $($targetArray[i]).attr("class") + " taged");
+		}
+	};
+	//--	clear the background color for hit entry
+	this.cleanHitEntryColor = function() {
+		var tagedArray = $(".taged");
+		for(var i = 0; i < tagedArray.length; i ++) {
+			$(tagedArray[i]).removeClass("taged");
+			$(tagedArray[i]).attr("style", "background-color:white;color:rgb(0, 0, 0)");
+		}
+	};
+	//--	change the bottom red line for miss entry
+	this.changeMissEntryColorBottom = function( missEntry) {
+		$(missEntry).attr('style', 'color:rgb(0, 0, 0);border-bottom-color:red;border-bottom-width:5px');
+		$(missEntry).attr('class', missEntry.className + " miss");
+	};
+	//--	change the top red line for miss entry
+	this.changeMissEntryColorTop = function( missEntry) {
+		$(missEntry).attr('style', 'color:rgb(0, 0, 0);border-top-color:red;border-top-width:5px');
+		$(missEntry).attr('class', missEntry.className + " miss");
+	};
+	
+	//--	clean the red linr for miss entry
+	this.cleanMissEntryColor = function() {
+		var tagedArray = $(".miss");
+		for(var i = 0; i < tagedArray.length; i ++) {
+			$(tagedArray[i]).removeClass("miss");
+			$(tagedArray[i]).attr("style", "color:rgb(0, 0, 0)");
+		}
+	};
+	
+	//--	show book row
+	this.showBookRow = function() {
+		$("#queryRow").hide();
+		$("#bookRow").show();
+	};
+	
+	//--	show query row
+	this.showQueryRow = function() {
+		$("#bookRow").hide();
+		$("#queryRow").show();
+	};
+	//--	claen query result
+	this.cleanQueryResult = function() {
+		$("#querySidebar").empty();
+	};
+	
+	//--	adjust bookcase layout
+	this.adjustBook = function() {
+		$bookcase.push($(".book").last()[0]);
+		var num = $(".book").length;
+		var numOfBlock = 12/num;
+		for(var i = 0; i < num; i ++) {
+			$($(".book")[i]).attr('class', 'book col-sm-' + numOfBlock + ' content');
+		}
+	};
+	
+	//--	slide book's slider
+	this.moveBookSlider = function(slider, target, offset) {
+		$(slider).animate({
+			scrollTop: $(slider).scrollTop() + ( $(target).offset().top - $(slider).offset().top ) + offset
+		}, 600);
+	};
+	
+	//--	query result to book
+	this.findResultInBook = function(event) {
+		this.showBookRow();
+		var target = $('.' + "text" + event.target.className.replace('btn-primary', '').replace('btn', '').replace('btn-xs', '').replace(/\s+/g,"."))[0];
+		$(target).trigger('click');
+	};
+};
+//--    2.Corpus Object : The unit of the stored context.
+function Corpus(name, db, corpus) {
+	this.name = name;
+	this.db = db;
+	this.corpus = corpus;
+	this.yearBlocks = [];
+}
+//--	3.Entry Object : The unit of the stored context-entry.
+function Entry(content, timeInfo) {
+	//var tmp = content.match(/<[^> ]+[^>]*>[^<]*/g);
+	//this.content = content.split("</")[1];
+    if(content.includes('<')){
+        var tag_start = content.indexOf('<');
+        var tag_end = content.indexOf('>');
+        var content_end = content.indexOf('</');
+        this.anchar = content.substr(tag_start+1, tag_end-tag_start-1);
+        this.content = content.substr(tag_end+1, content_end-tag_end-1);
+	} else {
+		this.anchar = "Udef_default_anchar";
+        this.content = content        
+    }
+
+    //this.time = getTime(timeInfo);
+    this.year = timeInfo.dateAdYear; // 以後要拿掉
+    this.time = this.anchar;
+    
+	/*
+	function getTime(timeInfo) {
+		
+		if(timeInfo.timeseqNotAfter != undefined && timeInfo.timeseqNotBefore != undefined ) {
+			year = (timeInfo.timeseqNumber.substr(0, timeInfo.timeseqNumber.length -4) - 100000);
+			
+			//year = timeInfo.dateAdYear;
+			day = timeInfo.dateAdDate.substr( timeInfo.dateAdDate.length - 2 );
+			monthStart = parseInt( timeInfo.timeseqNotBefore.substr(timeInfo.timeseqNotBefore.length - 4, 2) );
+			monthEnd = parseInt( timeInfo.timeseqNotAfter.substr(timeInfo.timeseqNotAfter.length - 4, 2) );
+			result = year + " ";
+			
+			for(var i = monthStart; i <= monthEnd; i ++) {
+				if(i < 10) result += "m0" + i + " d" + day + " ";
+				else result += "m" + i + " d" + day + " ";
+			}
+			return result.slice(0, -1);
+		} else {
+			//year = timeInfo.dateAdDate.substr(0, timeInfo.timeseqNumber.length - 4);
+			//year = Math.abs(100000-year);
+			year = timeInfo.dateAdYear;
+			month = timeInfo.dateAdDate.substr(timeInfo.dateAdDate.length - 4, 2);
+			day = timeInfo.dateAdDate.substr(timeInfo.dateAdDate.length - 2);
+			return year + " m" + month + " d" + day;
+		}
+
+	}*/
+}
+//--	4.YearBlock Object : The unit of the stored context-year.
+function YearBlock(title, entrys, year) {
+	this.title = title;
+	this.entrys = entrys;
+	this.year = year;
+	getYear(this.year, this.title);
+	
+	
+	function getYear(year, title) {
+		if( $yearList[year] == undefined) {
+			$yearList[year] = [title];
+		} else {
+			if($yearList[year].indexOf(title) == -1 ) $yearList[year].push(title);
+		}
+	}
+}
+//--	5.Target Object : Uesd to present the entry that has been find to the same date.
+function Target(year, month, day, $timeArray) {
+	var year = year;
+	var month = month;
+	var day = day;
+	var $timeArray = buildTimeArray($timeArray);
+	
+	this.getDay = function() {
+		result = "";
+		for(var i in $timeArray) {
+			result += ".list-group-item." + year + "." + $timeArray[i].month + "." + $timeArray[i].day + ", ";
+		}
+		return result.slice(0, -2);;
+	}
+	
+	this.getDayNum = function() {
+		return parseInt( day.replace("d", "") );
+	}
+	
+	this.getMonth = function() {
+		return ".list-group-item." + year + "." + month;
+	}
+	
+	this.getMonthNum = function() {
+		return parseInt( month.replace("m", "") );
+	}
+	
+	this.getYear = function() {
+		return ".list-group-item." + year;
+	}
+	
+	function buildTimeArray($timeArray) {
+		if( $timeArray.length > 4 ) {
+			var temp = new Array();
+			for(var i = 2; i < $timeArray.length; i += 2) {
+				var matchPoint = {
+					month : $timeArray[i],
+					day : $timeArray[i+1]
+				};
+				temp.push(matchPoint);
+			}
+			return temp;
+		} else {
+			var matchPoint = {
+				month : $timeArray[2],
+				day : $timeArray[3]
+			};
+			return new Array(matchPoint);
+		}
+	
+	}
+	
+	this.toString = function() {
+		return year + "," + month + "," + day;
+	}
+}
+//--    6.Saver Object : Used to control the bookcase save issue from DocuSky.
+function Saver() {
+	this.category = 'TextJuxtaposition';
+	this.datapath = 'Saver';
+	this.fileName  = 'Bookcases';
+	this.bookcaseList = [];
+	this.completeArray = [];
+	this.corpusLength = 0
+
+    //--    list user store  bookcases list
+    this.showBookcaseList = function() {
+        var transporter = docuSkyObjSaver.jsonTransporter;
+		transporter.retrieveJson(this.category, this.datapath, this.fileName, this.showBookcaseListCB);
+    };
+    //--    showBookcaseList callback
+    this.showBookcaseListCB = function() {
+        var json = docuSkyObjSaver.jsonTransporter.jsonObj;
+        console.log(json);
+        if( json.code == "204" ) {
+           
+        } else {
+            saver.bookcaseList = JSON.parse(json);
+            for(var i = 0; i < saver.bookcaseList.length; i ++) {
+                $('#bookcaseListTable').append("<tr>" + 
+                    "<th>" + (i+1) + "</th>" + 
+                    "<th>" + saver.bookcaseList[i].bookcaseName + "</th>" + 
+                    "<th> " + saver.bookcaseList[i].bookcaseUploadTime + "</th>" + 
+                    "<th> " + saver.getbooksInfoBybookcase( saver.bookcaseList[i].books ) + "</th>" + 
+                    "<th><button type='button' class='btn btn-default' onclick='saver.loadBookcaseByClick(\"" + saver.bookcaseList[i].bookcaseName + "\");'>載入</button>" + 
+                    "<button type='button' class='btn btn-default' onclick='saver.deleteBookcase(\"" + saver.bookcaseList[i].bookcaseName + "\");'>刪除</button></th>")
+            }
+        }
+    };
+
+    //--    save bookcase 
+    this.saveBookcase = function() {
+        var transporter = docuSkyObjSaver.jsonTransporter;
+        transporter.category = this.category;
+		transporter.datapath = this.datapath;
+		transporter.fileName = this.fileName;
+        var bookcase = this.getSavedBookcase();
+
+        if( this.getBookcaseByName(bookcase.bookcaseName) )  { //--  覆蓋
+            
+        } else {
+            this.bookcaseList.push(bookcase);
+        }
+		transporter.storeJson(JSON.stringify(this.bookcaseList) , alert("Successfully store Json object to DocuSky") );
+    };
+
+    //--    load selected bookcase
+    this.loadBookcaseByClick = function( bookcaseName ) {
+        var books = this.getBookcaseByName(bookcaseName).books;
+        this.corpusLength = books.length;
+		for( var i in books ) {
+			this.completeArray[books[i].corpus] = null;
+			docuSkyObj.getDbCorpusDocumentsGivenPageAndSize('USER', books[i].db, books[i].corpus, 1, 5000, event, this.loadBookcaseByClickCountSizeCB);
+		}
+    };
+    //--    load selected bookcase callback
+    this.loadBookcaseByClickCountSizeCB = function(event) {
+        var target = 'USER', db = docuSkyObj.db, corpus = docuSkyObj.corpus, page = 1, pageSize = docuSkyObj.totalFound;
+        docuSkyObj.getDbCorpusDocumentsGivenPageAndSize(target, db, corpus, page, pageSize, event, saver.loadBookcaseByClickCB);
+    };
+
+
+    this.loadBookcaseByClickCB = function() {
+        saver.completeArray[docuSkyObj.corpus] = docuSkyObj.docList;
+		if(saver.judgeCompleteArray() == true)	saver.saverBuild();
+    };
+    //--    when corpus all ready, build it
+    this.saverBuild = function() {
+		for(i in saver.completeArray) {
+			var corpus = buildCorpus(saver.completeArray[i]);
+			$corpus.push(corpus);
+			corpusToBookcase(corpus);
+		}
+    };
+
+    //--    delete user bookcase 
+    this.deleteBookcase = function(bookcaseName) {
+        var transporter = docuSkyObjSaver.jsonTransporter;
+        transporter.category = this.category;
+		transporter.datapath = this.datapath;
+		transporter.fileName = this.fileName;
+        var bookcase = this.getBookcaseByName(bookcaseName);
+        var index = this.bookcaseList.indexOf(bookcase);
+
+        if(index >= 0) {
+            this.bookcaseList.splice(index, 1);
+        }
+        transporter.storeJson(JSON.stringify(this.bookcaseList));
+    };
+
+
+
+    //*****************************************
+	//*										  *
+	//*										  *
+	//*				  getter 				  *
+	//*										  *
+	//*										  *
+	//*****************************************
+
+    //--    get bookcase info form input
+    this.getSavedBookcase = function() {
+        var bookcase = {};
+        bookcase.bookcaseName = $('#saveBookName')[0].value;
+
+        var savedBook = $('#saveBookcasebody').find('input');
+		var result = [];
+		for(var i in savedBook) {
+			if(savedBook[i].checked == true) {
+				result.push({"db":$corpus[i].db, "corpus":$corpus[i].corpus});
+			}
+		}
+        bookcase.books = result;
+        bookcase.bookcaseUploadTime = new Date().toDateString();
+
+        return bookcase;
+    };
+
+    //--    get bookcase from this.bookcaseList
+    this.getBookcaseByName = function(bookcaseName) {
+        for(var i in this.bookcaseList) {
+            if(this.bookcaseList[i].bookcaseName == bookcaseName)  return this.bookcaseList[i];
+        }
+    };
+
+    //--    get book's db, corpus from books
+    this.getbooksInfoBybookcase = function(books) {
+        var result = "";
+        for(var i in books) {
+            result += books[i].corpus;
+            result += ", ";
+        }
+        return result;
+    };
+
+    this.judgeCompleteArray = function(){
+        for(var i in saver.completeArray) {
+			if(saver.completeArray[i] == null)	return false;
+		}
+		return true;
+    };
+}
+
+</script>
+
+
+<body>
+   	<!-- top static bar  -->
+    <nav class="navbar navbar-default navbar-static-top">
+    	<div class="container-fluid">
+        	<div class="navbar-header">
+          		<a class="navbar-brand" href="#" id="getDocuSkyDocs">文本對讀系統</a>
+			</div>
+			<div class="navbar-header">
+          		<a id='bookcaseListOuter' class="navbar-brand" data-toggle="modal" href data-target="#userBookcase" >使用者書櫃</a>
+			</div>
+            <!--
+			<div class="navbar-header">
+          		<a id='' class="navbar-brand" data-toggle="modal" >系統介紹</a>
+			</div>
+            -->
+			<div class="navbar-collapse collapse">
+         		<ul class="nav navbar-nav">
+					<li class="dropdown" ><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">年代書籤列表<span class="caret"></span></a>
+						<ul id="yearList" class="dropdown-menu" >
+						</ul>
+					</li>
+				</ul>
+				
+				<span id="books" >
+					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="show_page(this.parentElement)" >選擇文本</button>
+				</span>
+				<span style='float:right'>
+                    <button style='margin-top:7px;' type="button" class="btn btn-primary" onclick="layout.showBookRow()" > <-對讀頁面</button>
+                    <button style='margin-top:7px;' type="button" class="btn btn-primary" onclick="layout.showQueryRow()" >檢索頁面-></button>
+                </span>
+                
+				<form id='searchBar' class="navbar-form navbar-right" style="margin-right:2px">
+            		<input id='query' type="text" name="query" class="form-control" placeholder="搜尋...">
+                    <button type='submit' class="btn btn-default">全文檢索</button>
+          		</form>
+			</div>
+      	</div>
+    </nav>
+    
+	    <!-- Main board -->
+    <div class="container-fluid" >
+    	<div class="row" id = "bookRow">
+    		<div id="main">
+				<div class="col-sm-12 col-md-12">
+					<div id="bookContainer" class="row" ></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" id = "queryRow" hidden>
+			<div id="main">
+				<div class="col-sm-12 col-md-12">
+
+                    <!-- query container here -->
+					<div id="queryContainer" class="row" >
+
+                        <!-- time classificationTable  -->
+						<div class="col-sm-3 col-md-3">
+							<div id='classificationTable' style='width:24%;height:800px;position:fixed;overflow-y:scroll' >
+								<h4>檢索結果 : </h4>
+								<div role="tabpanel" >
+								  <!-- Nav tabs -->
+									<ul class="nav nav-tabs" role="tablist">
+										<li role="presentation" class="active"><a href="#yearList" aria-controls="yearList" role="tab" data-toggle="tab">時間</a></li>
+									</ul>
+									<div class="tab-content">
+										<div role='tabpanel' class='tab-pane active panel-body' id="yearList" >
+											<div id='yearListGroup' class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+                        <!-- query result table-->
+						<div class="col-sm-9 col-md-9">
+							<ul id="querySidebar" class="nav nav-sidebar" style='width:100%;height:500px;overflow-x:auto;overflow-y:auto;'>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<!-- user defined bookcase content -->
+
+	<div class="modal fade" id="userBookcase" tabindex="-1" role="dialog" aria-labelledby="userBookcaseLabel" aria-hidden="true">
+		<div class="modal-dialog" style='height:90%;'>
+			<div class="modal-content" style='height:90%;'>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="userBookcaseLabel">使用者書櫃清單</h4>
+				</div>
+
+				<div class="modal-body" style='height:80%;'>
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a id='bookcaseListInner' href="#home" aria-controls="home" role="tab" data-toggle="tab">書櫃清單</a></li>
+						<li role="presentation"><a id='saveBookcaseInner' href="#profile" aria-controls="profile" role="tab" data-toggle="tab">儲存線有文本</a></li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>書櫃名稱</th>
+										<th>上傳時間</th>
+										<th>書櫃內容</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody id='bookcaseListTable'>
+								</tbody>
+							</table>
+						</div>
+
+						<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+							<div class="panel panel-default" style='margin-top:20px'>
+								<div class="panel-heading">
+									<h3 class="panel-title">請勾選欲儲存的文本</h3>
+								</div>
+								<div id='saveBookcasebody' class="panel-body">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+
+<script>
+                        //*****************************************
+                        //*										  *
+                        //*										  *
+                        //*			    DocuSky init		      *
+                        //*										  *
+                        //*										  *
+                        //*****************************************
+var docuSkyObj = null;                      //--    docuSky context import object
+var docuSkyObjSaver = null;                 //--    docusky saver object
+var layout = new Layout();
+var saver = new Saver();
+var $corpus = [];                           //--    user import corpus
+var $bookcase = [];                         //--    user bookcase
+var $checked = [];                          //--    user checked context
+var $yearList = [];                         //--    user query year classification
+var $queryHash = [];                        //--    user query result hash<time, query result>
+var queryReadyCount = 0;                    //--    callback ready count
+
+function importFromDocuSkyCountSizeCallback(e) {
+	var target = 'USER', db = docuSkyObj.db, corpus = docuSkyObj.corpus, page = 1, pageSize = docuSkyObj.totalFound;
+   docuSkyObj.getDbCorpusDocumentsGivenPageAndSize(target, db, corpus, page, pageSize, e, window.importFromDocuSkyCallback);
+}
+
+function importFromDocuSkyCallback() {
+    console.log(docuSkyObj.totalFound);
+    var corpus = buildCorpus(docuSkyObj.docList);
+	$corpus.push(corpus);
+	corpusToBookcase(corpus);
+}
+
+var setDocuSkyRef = function() {
+   if (docuskyGetDbCorpusDocumentsSimpleUI === null) {
+      alert("widget not ready, please wait for a while");
+   }
+   else if (docuSkyObj === null) {
+      docuSkyObj = docuskyGetDbCorpusDocumentsSimpleUI;
+      console.log(docuSkyObj);
+      $("#getDocuSkyDocs").click(function(e) {
+         var target = 'USER', db = '', corpus = '', page = 1, pageSize = 3;
+         docuSkyObj.getDbCorpusDocumentsGivenPageAndSize(target, db, corpus, page, pageSize, e, window.importFromDocuSkyCountSizeCallback );
+      });
+   }
+   if( docuSkyObjSaver === null) {
+	   docuSkyObjSaver = docuskyManageDataFileListSimpleUI;
+	   console.log(docuSkyObjSaver);
+       /*
+       $("#bookcaseListOuter").click(function(e) {
+         docuSkyObjSaver.manageDataFileList(e);
+      });*/
+   }
+   
+   clearInterval(setDocuSkyRef);
+}
+
+$(window).ready(function() { 
+   setInterval(setDocuSkyRef, 1000);
+});
+
+</script>
+
+<script>
+                        //*****************************************
+                        //*										  *
+                        //*										  *
+                        //*			    program init		      *
+                        //*										  *
+                        //*										  *
+                        //*****************************************
+$(document).ready(function() {
+    //--    adjust panel size
+	$('#querySidebar').attr('style', 'width:100%;height:' + (layout.height+60) + 'px;overflow-x:auto;overflow-y:auto;');
+	$('#classificationTable').attr('style', 'width:24%;height:' + (layout.height+60) + 'px;position:fixed;overflow-y:scroll;');
+
+    
+	$('body').on('click', 'ul.dropdown-menu [data-toggle=dropdown]', function(event) {
+		event.preventDefault(); 
+		event.stopPropagation(); 
+		$(this).parent().siblings().removeClass('open');
+		$(this).parent().toggleClass('open');
+	});
+
+    //--    append yearList action
+	$('body').on('click', 'a.yearTag', function(event) {
+		var $slider = $(".nav-sidebar");
+		for(var i = 0; i < $slider.length; i ++) {
+			var target = $($slider[i]).find( ".block." + this.hash.replace("#", "") )[0];
+			if( target ) {
+				layout.moveBookSlider($slider[i], target, 0);
+			}
+		}			
+	});
+	
+
+	//--    query button
+	$('body').on('submit', '#searchBar', function(event) {
+		event.preventDefault(); 
+		var queries = [];
+		
+		for(var i = 0; i < $corpus.length; i ++) {
+			queries.push( {channelKey: i+1,
+							target: 'USER',
+							corpus: $corpus[i].corpus,
+							db: $corpus[i].db,
+							pageSize : 5000,
+							query: $("#query")[0].value} 
+			);
+		}
+		for (var i=0; i < queries.length; i++) {
+            var query = queries[i];
+            docuSkyObj.getQueryResultDocuments(query, event, displayQueryDocList);
+        }
+	});
+
+    //--    bookcaseInner list button
+	$('#bookcaseListInner').on('click', function(event) {
+		$('#bookcaseListTable').empty();
+		saver.showBookcaseList();
+	});
+
+    //--    bookcaseOuter list button
+    
+	$('#bookcaseListOuter').on('click', function(event) {
+		$('#bookcaseListTable').empty();
+		saver.showBookcaseList();
+	});
+
+    //--    bookcase saver list
+	$('#saveBookcaseInner').on('click', function(event){
+		//--	並無載入任何文本
+		$('#saveBookcasebody').empty();
+		if($corpus.length == 0) {
+			$('#saveBookcasebody')[0].innerHTML = '並沒有載入任何文本'
+		} else {
+			for(var i in $corpus) {
+				$( $('#saveBookcasebody')[0] ).append("<label><input type='checkbox' value=" + i + ">  文本名稱 : " + $corpus[i].corpus + "</label></br>");
+			}
+			$( $('#saveBookcasebody')[0] ).append("<input id='saveBookName' type='text' class='form-control' placeholder='輸入書櫃名稱'></br>");
+			$( $('#saveBookcasebody')[0] ).append("<button type='button' class='btn' onclick='saver.saveBookcase(event);'>儲存</button>");
+		}
+	})
+
+    $(window).resize(function() {
+        layout.adjustPanelByWindowSize();
+    });
+});
+
+</script>
+
+<script>
+                        //*****************************************
+                        //*										  *
+                        //*										  *
+                        //*			  functino here 		      *
+                        //*										  *
+                        //*										  *
+                        //*****************************************
+/*                      
+function displayQueryDocList(channelKey) {
+    queryReadyCount ++;
+
+    if(queryReadyCount == $corpus.length) {		//--	all query result ready
+        queryReadyCount = 0;
+        layout.cleanQueryResult();
+        $queryHash = [];
+        
+        for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
+            result = docuSkyObj.channelBuffer[i].docList;
+            
+            for(var j in result) {
+            var year = (result[j].docInfo.timeInfo.timeseqNumber.substr(0, result[j].docInfo.timeInfo.timeseqNumber.length -4)-100000);
+            
+                if( $queryHash[year] != undefined ) {
+                    
+                    if($queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] != undefined) {
+                    
+                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
+                        
+                    } else {	
+                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] = [];
+                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
+                        $queryHash[year].dateChNorm = result[j].docInfo.timeInfo.dateChNormYear;
+                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].oriTimeString = result[j].docInfo.timeInfo.dateOrigStr;
+                    }	
+                } else {
+                    $queryHash[year] = [];
+                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] = [];
+                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
+                    $queryHash[year].dateChNorm = result[j].docInfo.timeInfo.dateChNormYear;
+                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].oriTimeString = result[j].docInfo.timeInfo.dateOrigStr;
+                }
+            }
+        }
+        
+        for(var i in $queryHash) {
+            var panelHeading = "<div class='panel panel-default queryBlock " + $queryHash[i].dateChNorm + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + $queryHash[i].dateChNorm + "</div><div class='panel-body'></div></div>";
+            $("#querySidebar").append(panelHeading);
+            var temp = $("#querySidebar").find("." + $queryHash[i].dateChNorm + ".queryBlock")[0].lastElementChild;
+            
+            for(var j in $queryHash[i]) {
+                if($queryHash[i][j].constructor != Array().constructor)
+                    continue;
+                var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
+                $(temp).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + entry.time + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
+                $(temp).append("<strong class='" + entry.time + "' > " + $queryHash[i][j].oriTimeString + "</strong>");
+                
+                var groupList = document.createElement("lu");
+                groupList.className = "list-group";
+                for(var k in $queryHash[i][j]) {
+                    if($queryHash[i][j][k].constructor == String().constructor)
+                        continue;
+                    $(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
+                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace($("#query")[0].value,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
+                    $(groupList).append(block);
+                }
+                $(temp).append(groupList);
+            }	
+        }
+        layout.showQueryRow();
+        buildYearAnalysis();
+    }
+}
+*/
+//--    build book panel by corpus
+function corpusToBookcase(corpus) {
+
+	$("#bookContainer").append(layout.createBookContainer(corpus.name));
+	var box = $($("#bookContainer")[0].lastChild.lastChild);
+
+	for(i = 0; i < corpus.yearBlocks.length; i ++) {
+		
+		box.append( layout.createBookPanel(corpus.yearBlocks[i].title, corpus.yearBlocks[i].year) );
+		var temp = box.find("div." + corpus.yearBlocks[i].title)[0];
+		var groupList = layout.createBookListGroup();
+		
+		for(var j = 0; j < corpus.yearBlocks[i].entrys.length; j ++) {
+			$(groupList).append(layout.createBookListGroupItem(corpus.yearBlocks[i].entrys[j].time, corpus.yearBlocks[i].entrys[j].content));
+		}
+		$(temp).append(groupList);
+	}
+	$checked.push(true);
+	layout.adjustBook();
+	layout.addBookCheckBox(corpus.name);
+	adjustYearList();
+}
+
+//--    build corpus by docusky docList
+function buildCorpus(docList) {
+	var corpus = new Corpus(docList[0].docInfo.corpus, docuSkyObj.db, docList[0].docInfo.corpus);
+	var judge = docList[0].docInfo.timeInfo.dateChNormYear;
+	var yearCandidate = [];
+	
+	var temp = [];
+
+    for(var i = 0; i < docList.length; i ++) {
+    //--    有沒有專屬的time
+        var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "");
+        var timeinfo = docList[i].docInfo.timeInfo;
+        
+        while(content.trim().length>1){
+            content = content.trim();
+            var entry_content = 0;
+            if(content.indexOf('<') != 0){
+                if(content.includes('<')){
+                    var tag_start = content.indexOf('<');
+                    entry_content = content.substr(0, tag_start-1);
+                    content = content.substr(tag_start, content.length-tag_start);
+                }else{ 
+                   	entry_content = content;
+                   	content = "";
+                }
+            }else{
+                var tag_start = content.indexOf('<');
+                var tag_end = nthIndex(content, '>', 2);
+                entry_content = content.substr(tag_start, tag_end-tag_start-1);
+                content = content.substr(tag_end+1, content.length-tag_end);
+                entry_content = String(content.trim().length) + entry_content;
+            }
+            var entry = new Entry(entry_content,timeinfo);                     
+                
+            if(docList[i].docInfo.timeInfo.dateChNormYear != judge) {
+                var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp, findMaxyearCandidateAdd(yearCandidate));
+                corpus.yearBlocks.push(yearBlock);
+                
+                judge = docList[i].docInfo.timeInfo.dateChNormYear;
+                temp = [];
+                temp.push(entry);
+                yearCandidate = []
+                yearCandidate[ entry.year ] = 1;
+            } else {
+                if(yearCandidate[entry.year]) {
+                    yearCandidate[entry.year] += 1;
+                } else {
+                    yearCandidate[entry.year] = 1;
+                }
+                temp.push(entry);
+            }
+        }
+    }
+    return corpus;
+
+    // find n-th pat
+    function nthIndex(str, pat, n){
+        var L= str.length, i= -1;
+        while(n-- && i++<L){
+            i= str.indexOf(pat, i);
+            if (i < 0) break;
+        }
+        return i;
+    }
+
+	
+	function findMaxyearCandidateAdd(yearCandidate) {
+	var max = 0;
+		for(var i in yearCandidate) {
+			if( yearCandidate[i] > max) max = yearCandidate[i];
+		}
+		for(var i in yearCandidate) {
+			if( yearCandidate[i] == max ) return i;
+		}
+	}
+}
+
+//--    Bookmarks builder
+function adjustYearList() {
+	//--	先清空
+	$("#yearList").empty();
+
+	var yearStart = Number.MAX_SAFE_INTEGER;
+	var yearEnd = Number.NEGATIVE_INFINITY;
+	
+	for(var i in $yearList ) {
+		num = parseInt(i);
+		if( num < yearStart) yearStart = num;
+		if( num > yearEnd )yearEnd = num;
+	}
+	yearStart = Math.floor(yearStart/10);
+	yearEnd = Math.floor(yearEnd/10);
+	
+	for(var i = yearStart; i <= yearEnd; i++) {
+		var dropdownMenu = document.createElement("ul");
+		dropdownMenu.className = "dropdown-menu";
+		
+		for(var j = 0; j < 10; j ++) {
+			year = i * 10 + j;
+
+			if($yearList[year]) {
+				$(dropdownMenu).append("<li style='display:inline;width:250px'><a href='#" + year + "' class='yearTag' >" + year + "(" + $yearList[year] + ")</a></li>");
+			}	else {
+				//dropdownMenu.append("<li><a href='#' class='yearTag' ></a></li>");
+			}
+		}
+		if(dropdownMenu.childElementCount == 0) continue;				//沒有該年分
+		var submenu = document.createElement("li");
+		submenu.className = "dropdown dropdown-submenu";
+		$(submenu).append("<a href='#' class='dropdown-toggle' data-toggle='dropdown'>" + i*10 + "~" + (i*10+9) + "</a>");
+		$(submenu).append(dropdownMenu);
+		$("#yearList").append(submenu);
+	}
+}
+
+//--	select book in corpus
+function show_page(span) {
+	var $label = span.children;
+	var count = 0;
+	
+	for(var i = 1; i < $label.length; i ++) {
+		var flag = $label[i].children[0].checked;
+		if( flag == true) {
+			$checked[i-1] = true;
+			count ++;
+		} else {
+			$checked[i-1] = false;
+		}
+	}
+	
+	var numOfBlock = 12/count;
+	for(i = 0; i < $bookcase.length; i ++) {
+	
+		if($checked[i] == true) {
+			$("#bookContainer").append($bookcase[i]);
+			$($bookcase[i]).attr('class', 'book col-sm-' + numOfBlock + ' content');
+		} else {
+			$( $bookcase[i] ).detach();
+		}
+	}
+}
+
+function moveAnchor(event) {
+	//--	**********對應function**********
+	
+	var parentBlock = event.target.parentElement.parentElement;
+	// DH project
+	// var $timeArray = event.target.hash.split(" ");
+	var $timeArray = event.target.hash.split("%20");
+	var target = new Target($timeArray[1], $timeArray[2], $timeArray[3], $timeArray);
+	
+			
+	//--	用年分 $("." + parentBlock.className.split(" ")[3]去抓
+	var $blockArray = $("." + parentBlock.className.split(" ")[3] + ".block ");
+	
+	//--	欲移動的值 預設皆為零
+	var $anchorArray = [];
+	for(var i = 0; i < $blockArray.length; i ++) {
+		$anchorArray.push(0);
+	}
+	//--	消除上一次點選所標記的
+	layout.cleanHitEntryColor();
+	layout.cleanMissEntryColor();	
+	
+	
+	for(var i = 0; i < $blockArray.length; i ++) {
+		
+		var $temp = $( $blockArray[i].lastElementChild ).find(target.getDay());
+		
+		//--	targetDay HIT
+		if($temp.length > 0) {
+			if( target.getDay().split(".").length <= 5) {
+				var $onlyArray = [];
+				for(var k = 0; k < $temp.length; k ++) {
+					if( $temp[k].className.split(" ").length == 5 ) {
+						$onlyArray.push($temp[k]);
+					}
+				}
+				if($onlyArray.length > 0) $temp = $onlyArray;
+			}
+				
+			layout.changeHitEntryColor($temp);
+			if( $blockArray[i] == parentBlock ) {
+				var a = $(parentBlock.parentElement).offset().top;
+				var b = $( $temp[0] ).offset().top;
+				
+				if(a > b || (b - a) >  layout.height) {
+					$anchorArray[i] = $( $temp[0] ).offset().top;
+				} else {
+					$anchorArray[i] = 200 + $(parentBlock.parentElement).offset().top;
+				}
+			} else {
+				$anchorArray[i] = $( $temp[0] ).offset().top ;
+			}
+		} 
+		//--	targetDay MISS
+		else {
+			var $monthHit = $( $blockArray[i].lastElementChild ).find(target.getMonth());
+			//--	find nearest Day
+			if($monthHit.length > 0) {
+				var flag = false;
+				for(var j = $monthHit.length - 1; j >= 0; j -- ) {
+					timeHref = $monthHit[j].hash.split(" ")[3].replace("d", "");
+					if( target.getDayNum() > timeHref) {
+						layout.changeMissEntryColorBottom($monthHit[j]);
+						
+						if( (j+1) >=  $monthHit.length) {
+							$anchorArray[i] = $($monthHit[$monthHit.length-1]).offset().top;
+							layout.changeMissEntryColorBottom($blockArray[i]);
+							
+						} else {
+							$anchorArray[i] = $($monthHit[j+1]).offset().top;
+						}
+						flag = true;
+						break;
+					}else if(j == 0 && flag == false) {
+						layout.changeMissEntryColorTop($monthHit[0]);
+						$anchorArray[i] = $($monthHit[0]).offset().top;
+					}
+				}
+			
+			} 
+			//--	find nearest Month
+			else {
+				var flag = false;
+				var $entryArray = $( $blockArray[i].lastElementChild ).find(target.getYear());
+				for(var j = $entryArray.length - 1; j >= 0; j -- ) {
+					timeHref = $entryArray[j].hash.split(" ")[2].replace("m", "");				
+					if( target.getMonthNum() > parseInt(timeHref) ) {
+						layout.changeMissEntryColorBottom($entryArray[j]);
+						
+						if( (j+1) >= $entryArray.length ) {
+							$anchorArray[i] = $( $entryArray[$entryArray.length-1] ).offset().top;
+							layout.changeMissEntryColorBottom($blockArray[i]);
+							
+						} else {
+							$anchorArray[i] = $($entryArray[j+1]).offset().top;
+						}
+						flag = true;
+						break;
+						
+						
+					}else if(j == 0 && flag == false) {
+						layout.changeMissEntryColorTop($entryArray[0]);
+						$anchorArray[i] = $($entryArray[0]).offset().top;
+					}
+				}
+			}
+		}
+	}
+	//--	移動到該位置
+	for(var i = 0; i < $anchorArray.length; i ++) {
+		//if(parentBlock.parentElement == $(".nav-sidebar")[i]) continue;
+		$($(".nav-sidebar")[i]).animate({
+			scrollTop: $( $(".nav-sidebar")[i] ).scrollTop() + $anchorArray[i] - $($(".nav-sidebar")[i]).offset().top -200
+		}, 600);
+	}
+}
+
+
+function ObjectLength( object ) {
+    var length = 0;
+    for( var key in object ) {
+        if( object.hasOwnProperty(key) ) {
+            ++length;
+        }
+    }
+    return length;
+};
+
+//--    build query result panel
+function buildYearAnalysis() {
+	$("#yearListGroup").empty();				//--	reset
+	
+	for(var i in $queryHash) {
+		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].dateChNorm + "(" + (ObjectLength($queryHash[i])-1) + ")</a></h4></div></div>";
+		var headingId = "heading" + i;
+		var collapseId = "collapse" + i;
+		$("#yearListGroup").append(panel);
+		panel = $("#yearListGroup").find("." + i)[0];
+		$(panel).append("<div id='" + collapseId + "' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + headingId + "'>");
+		var collapse = $(panel).find("#" + collapseId);
+		
+		for(var j in $queryHash[i]) {
+			if($queryHash[i][j].constructor == String().constructor) continue;
+			
+			var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
+			var panelBody="<div class='panel-body'><a href='#' class='" + entry.time + "' onclick='moveAnchorForQuery(event)'>" + $queryHash[i][j].oriTimeString + "(" + $queryHash[i][j].length +  ")</a></div>";
+			
+			$(collapse).append(panelBody);
+		}
+		
+	}
+}
+
+//--    query result to book
+function moveAnchorForQuery(event) {
+	var target = $('#querySidebar').find("strong." + event.target.className.replace(/\s+/g,"."));
+	var h = target.offset().top;
+	$($("#querySidebar")[0]).animate({
+			scrollTop: $( $("#querySidebar")[0] ).scrollTop() + h - $($("#querySidebar")[0]).offset().top - 20
+		}, 600);
+	layout.cleanHitEntryColor();
+	layout.changeHitEntryColor($(target[0].nextElementSibling).find('li'));
+	
+}
+</script>
+</html>
