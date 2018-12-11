@@ -207,22 +207,20 @@ function Corpus(name, db, corpus) {
 }
 //--	3.Entry Object : The unit of the stored context-entry.
 function Entry(content, timeInfo) {
-	//var tmp = content.match(/<[^> ]+[^>]*>[^<]*/g);
-	//this.content = content.split("</")[1];
     if(content.includes('<')){
         var tag_start = content.indexOf('<');
         var tag_end = content.indexOf('>');
         var content_end = content.indexOf('</');
-        this.anchar = content.substr(tag_start+1, tag_end-tag_start-1);
+        this.ancher = content.substr(tag_start+1, tag_end-tag_start-1);
         this.content = content.substr(tag_end+1, content_end-tag_end-1);
 	} else {
-		this.anchar = "Udef_default_anchar";
+		this.ancher = "Udef_default_ancher";
         this.content = content        
     }
 
     //this.time = getTime(timeInfo);
     this.year = timeInfo.dateAdYear; // 以後要拿掉
-    this.time = this.anchar;
+    this.time = this.ancher;
     
 	/*
 	function getTime(timeInfo) {
