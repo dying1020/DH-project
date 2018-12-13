@@ -112,7 +112,10 @@ function Layout() {
 		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
 		+ corpusName + "</label>");
 	};
-	
+	this.addAnchorCheckBox = function(anchorsName) {
+		$("#anchors").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
+		+ anchorsName + "</label>");
+	}
 	
 	
 	//*****************************************
@@ -499,7 +502,7 @@ function Saver() {
 					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="show_page(this.parentElement)" >選擇文本</button>
 				</span>
 				<span id="anchors" >
-					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="show_page(this.parentElement)" >選擇錨點</button>
+					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="change_anchor(this.parentElement)" >選擇錨點</button>
 				</span>
 				<span style='float:right'>
                     <button style='margin-top:7px;' type="button" class="btn btn-primary" onclick="layout.showBookRow()" > -對讀頁面</button>
@@ -860,6 +863,7 @@ function corpusToBookcase(corpus) {
 	$checked.push(true);
 	layout.adjustBook();
 	layout.addBookCheckBox(corpus.name);
+	layout.addAnchorCheckBox("hi");
 	adjustYearList();
 }
 
@@ -1003,6 +1007,9 @@ function show_page(span) {
 			$( $bookcase[i] ).detach();
 		}
 	}
+}
+
+function changeAnchor(span) {
 }
 
 function moveAnchor(event) {
