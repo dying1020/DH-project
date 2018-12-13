@@ -112,9 +112,8 @@ function Layout() {
 		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
 		+ corpusName + "</label>");
 	};
-	this.addAnchorCheckBox = function(anchorsName) {
-		$("#anchors").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
-		+ anchorsName + "</label>");
+	this.addAnchorRadio = function(anchorsName) {
+		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='radio' name = 'anchor' value='1' >" + anchorsName +	"</radio>");
 	}
 	
 	
@@ -503,6 +502,9 @@ function Saver() {
 				</span>
 				<span id="anchors" >
 					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="change_anchor(this.parentElement)" >選擇錨點</button>
+					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='0' >錨點1 </radio>
+					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='1' >錨點2 </radio>
+					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='2' >錨點3 </radio>
 				</span>
 				<span style='float:right'>
                     <button style='margin-top:7px;' type="button" class="btn btn-primary" onclick="layout.showBookRow()" > -對讀頁面</button>
@@ -863,7 +865,7 @@ function corpusToBookcase(corpus) {
 	$checked.push(true);
 	layout.adjustBook();
 	layout.addBookCheckBox(corpus.name);
-	layout.addAnchorCheckBox("hi");
+	//layout.addAnchorRadio("hi");
 	adjustYearList();
 }
 
