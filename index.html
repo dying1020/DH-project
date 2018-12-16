@@ -208,7 +208,7 @@ function Corpus(name, db, corpus) {
 	this.yearBlocks = [];
 }
 //--	3.Entry Object : The unit of the stored context-entry.
-function Entry(content, timeInfo) {
+function Entry(content) {
     if(content.includes('<')){
         var tag_start = content.indexOf('<');
         var tag_end = content.indexOf('>');
@@ -217,11 +217,12 @@ function Entry(content, timeInfo) {
         this.content = content.substr(tag_end+1, content_end-tag_end-1);
 	} else {
 		this.ancher = "Udef_default_ancher";
-        this.content = content        
+        this.content = content;
     }
 
     //this.time = getTime(timeInfo);
-    this.year = timeInfo.dateAdYear; // 以後要拿掉
+    //this.year = timeInfo.dateAdYear; // 以後要拿掉
+    this.year = 1999;
     this.time = this.ancher;
     
 	/*
@@ -257,6 +258,7 @@ function YearBlock(title, entrys, year) {
 	this.title = title;
 	this.entrys = entrys;
 	this.year = year;
+	/*
 	getYear(this.year, this.title);
 	
 	
@@ -267,6 +269,7 @@ function YearBlock(title, entrys, year) {
 			if($yearList[year].indexOf(title) == -1 ) $yearList[year].push(title);
 		}
 	}
+	*/
 }
 //--	5.Target Object : Uesd to present the entry that has been find to the same date.
 function Target(year, month, day, $timeArray) {
@@ -872,45 +875,52 @@ function corpusToBookcase(corpus) {
 //--    build corpus by docusky docList
 function buildCorpus(docList) {
 	var corpus = new Corpus(docList[0].docInfo.corpus, docuSkyObj.db, docList[0].docInfo.corpus);
-	var judge = docList[0].docInfo.timeInfo.dateChNormYear;
+	var judge = docList[0].docInfo.docSource; // 目前是吃<doc_source>這個tag
 	var yearCandidate = [];
 	
 	var temp = [];
 
     for(var i = 0; i < docList.length; i ++) {
     //--    有沒有專屬的time
-        var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "");
-        var timeinfo = docList[i].docInfo.timeInfo;
-        
-        while(content.trim().length>1){
-            content = content.trim();
+        var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
+        //var timeinfo = docList[i].docInfo.timeInfo;
+        content = content.trim();
+        while(content.trim().length>1){          
             var entry_content = 0;
-            if(content.indexOf('<') != 0){
+            if(content.indexOf('<') != '0'){
                 if(content.includes('<')){
                     var tag_start = content.indexOf('<');
-                    entry_content = content.substr(0, tag_start-1);
+                    entry_content = content.substr(0, tag_start);
                     content = content.substr(tag_start, content.length-tag_start);
                 }else{ 
                    	entry_content = content;
                    	content = "";
                 }
+                entry_content = entry_content;
             }else{
                 var tag_start = content.indexOf('<');
                 var tag_end = nthIndex(content, '>', 2);
                 entry_content = content.substr(tag_start, tag_end-tag_start-1);
-                content = content.substr(tag_end+1, content.length-tag_end);
-                entry_content = String(content.trim().length) + entry_content;
+                content = content.substr(tag_end+1, content.length-tag_end);                
             }
-            var entry = new Entry(entry_content,timeinfo);                     
-                
-            if(docList[i].docInfo.timeInfo.dateChNormYear != judge) {
-                var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp, findMaxyearCandidateAdd(yearCandidate));
+            content = content.trim();
+            var entry = new Entry(entry_content);
+
+            if(yearCandidate[entry.year]) {
+                    yearCandidate[entry.year] += 1;
+                } else {
+                    yearCandidate[entry.year] = 1;
+                }
+               
+            if(docList[i].docInfo.docSource != judge) {
+                var yearBlock = new YearBlock(judge, temp, findMaxyearCandidateAdd(yearCandidate));
+
                 corpus.yearBlocks.push(yearBlock);
+                judge = docList[i].docInfo.docSource;
                 
-                judge = docList[i].docInfo.timeInfo.dateChNormYear;
                 temp = [];
                 temp.push(entry);
-                yearCandidate = []
+                yearCandidate = [];
                 yearCandidate[ entry.year ] = 1;
             } else {
                 if(yearCandidate[entry.year]) {
