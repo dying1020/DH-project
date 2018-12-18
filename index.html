@@ -227,6 +227,7 @@ function Entry(content) {
 		this.anchor = "Udef_default_anchor";
         this.content = content;
     }
+    this.content = content;
 
     this.time = this.anchor;
 
@@ -896,22 +897,28 @@ function buildCorpus(docList) {
         content = content.split("</Content>").join("");
         content = content.split("</Paragraph>").join("");
         
+        /*
         var j = 1;
         while(true){
+
         	var tag_start = nthIndex(content, '<', j);
         	var tag_end = nthIndex(content, '>', j);
 
-        	if(tag_start == -1 & tag_end == -1) break;
+        	if(tag_start <0 || tag_end < 0) break;
 
-        	var tag = content.substr(tag_start, tag_end-tag_start-1);
+        	var tag = content.substr(tag_start, tag_end-tag_start+1);
+        	//judge = tag + judge;
+        	//break;
 
-        	if(tag.includes('Udef_') == false){
-        		content = content.replace(tag, "");
+        	if(tag.includes('Udef_')) j++;
+        	else{
+        		content = content.replace(/tag/g, "");
+        		break;
 
-        	}else j++;
+        	}
 
 
-        }
+        }*/
 
         content = content.trim();
         while(content.trim().length>1){          
