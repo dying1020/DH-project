@@ -221,14 +221,14 @@ function Entry(content) {
         var tag_start = content.indexOf('<');
         var tag_end = content.indexOf('>');
         var content_end = content.indexOf('</');
-        this.ancher = content.substr(tag_start+1, tag_end-tag_start-1);
+        this.anchor = content.substr(tag_start+1, tag_end-tag_start-1);
         this.content = content.substr(tag_end+1, content_end-tag_end-1);
 	} else {
-		this.ancher = "Udef_default_ancher";
+		this.anchor = "Udef_default_anchor";
         this.content = content;
     }
 
-    this.time = this.ancher;
+    this.time = this.anchor;
 
     //this.time = getTime(timeInfo);
     //this.year = timeInfo.dateAdYear; // 以後要拿掉
