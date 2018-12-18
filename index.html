@@ -890,8 +890,29 @@ function buildCorpus(docList) {
 
     for(var i = 0; i < docList.length; i ++) {
     //--    有沒有專屬的time
-        var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
+        //var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
+        var content = docList[i].docInfo.docContentXml;
+        content = content.replace(/<Content>/g, "").replace(/<Paragraph>/g, "");
+        content = content.split("</Content>").join("");
+        content = content.split("</Paragraph>").join("");
         
+        var j = 1;
+        while(true){
+        	var tag_start = nthIndex(content, '<', j);
+        	var tag_end = nthIndex(content, '>', j);
+
+        	if(tag_start == -1 & tag_end == -1) break;
+
+        	var tag = content.substr(tag_start, tag_end-tag_start-1);
+
+        	if(tag.includes('Udef_') == false){
+        		content = content.replace(tag, "");
+
+        	}else j++;
+
+
+        }
+
         content = content.trim();
         while(content.trim().length>1){          
             var entry_content = 0;
