@@ -6,7 +6,7 @@ import numpy as np
 corpus = sys.argv[1]
 folder = os.path.join('data', 'xml_sep', corpus)
 
-corpus_sep = os.listdir(folder)
+corpus_sep = sorted(os.listdir(folder))
 corpus_all = []
 
 output = open(os.path.join('data', 'combined_new', corpus+'.xml'), "w")

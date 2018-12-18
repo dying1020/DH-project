@@ -2,113 +2,113 @@
 <ThdlPrototypeExport>
 
 <documents>
-<document filename="感遇·其二"><corpus corpus_order="1">Anchor_A</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
+<document filename="感遇·其二"><corpus corpus_order="1">corpus1_A</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
 <Udef_Anchor_A RefId="1" Term="1">江南有丹桔，經冬猶綠林。</Udef_Anchor_A>
 <Udef_Anchor_A RefId="2" Term="2">豈伊地气暖，自有歲寒心。</Udef_Anchor_A>
 <Udef_Anchor_A RefId="3" Term="3">可以荐佳客，奈何阻重深。</Udef_Anchor_A>
 <Udef_Anchor_A RefId="4" Term="4">運命唯所遇，循環不可尋。</Udef_Anchor_A>
 <Udef_Anchor_A RefId="5" Term="5">徒言樹桃李，此木豈無陰。</Udef_Anchor_A>
 </Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_A RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_A RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_A RefId="3" Term="3"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_A RefId="4" Term="4"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;5&quot; Term=&quot;5&quot;" type="contentTagging">Udef_Anchor_A RefId="5" Term="5"</tag></doc_user_tagging></document>
-<document filename="月下獨酌"><corpus corpus_order="1">Anchor_A</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
-<Udef_Anchor_A RefId="1" Term="1">花間一壺酒，獨酌無相親。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="2" Term="2">舉杯邀明月，對影成三人。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="3" Term="3">月既不解飲，影徒隨我身。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="4" Term="4">暫伴月將影，行樂須及春。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="5" Term="5">我歌月徘徊，我舞影零亂。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="6" Term="6">醒時同交歡，醉后各分散。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="7" Term="7">永結無情游，相期邈云漢。</Udef_Anchor_A>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_A RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_A RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_A RefId="3" Term="3"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_A RefId="4" Term="4"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;5&quot; Term=&quot;5&quot;" type="contentTagging">Udef_Anchor_A RefId="5" Term="5"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_A RefId="6" Term="6"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;7&quot; Term=&quot;7&quot;" type="contentTagging">Udef_Anchor_A RefId="7" Term="7"</tag></doc_user_tagging></document>
-<document filename="秋登蘭山寄張五"><corpus corpus_order="1">Anchor_A</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
-<Udef_Anchor_A RefId="1" Term="1">北山白云里，隱者自怡悅。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="2" Term="2">相望始登高，心隨雁飛滅。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="3" Term="3">愁因薄暮起，興是清秋發。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="4" Term="4">時見歸村人，沙行渡頭歇。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="5" Term="5">天邊樹若薺，江畔洲如月。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="6" Term="6">何當載酒來，共醉重陽節。</Udef_Anchor_A>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_A RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_A RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_A RefId="3" Term="3"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_A RefId="4" Term="4"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;5&quot; Term=&quot;5&quot;" type="contentTagging">Udef_Anchor_A RefId="5" Term="5"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_A RefId="6" Term="6"</tag></doc_user_tagging></document>
-<document filename="送別"><corpus corpus_order="1">Anchor_A</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_A RefId="1" Term="1">下馬飲君酒，問君何所之。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="2" Term="2">君言不得意，歸臥南山陲。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="3" Term="3">但去莫复問，白云無盡時。</Udef_Anchor_A>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_A RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_A RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_A RefId="3" Term="3"</tag></doc_user_tagging></document>
-<document filename="青溪"><corpus corpus_order="1">Anchor_A</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_A RefId="1" Term="1">言入黃花川，每逐青溪水。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="2" Term="2">隨山將万轉，趣途無百里。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="3" Term="3">聲喧亂石中，色靜深松里。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="4" Term="4">漾漾泛菱荇，澄澄映葭葦。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="5" Term="5">我心素已閒，清川澹如此。</Udef_Anchor_A>
-<Udef_Anchor_A RefId="6" Term="6">請留盤石上，垂釣將已矣。</Udef_Anchor_A>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_A RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_A RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_A RefId="3" Term="3"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_A RefId="4" Term="4"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;5&quot; Term=&quot;5&quot;" type="contentTagging">Udef_Anchor_A RefId="5" Term="5"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_A RefId="6" Term="6"</tag></doc_user_tagging></document><document filename="感遇·其二"><corpus corpus_order="1">Anchor_B</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
+<document filename="月下獨酌"><corpus corpus_order="1">corpus1_A</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
+<Udef_Anchor_A RefId="6" Term="6">花間一壺酒，獨酌無相親。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="7" Term="7">舉杯邀明月，對影成三人。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="8" Term="8">月既不解飲，影徒隨我身。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="9" Term="9">暫伴月將影，行樂須及春。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="10" Term="10">我歌月徘徊，我舞影零亂。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="11" Term="11">醒時同交歡，醉后各分散。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="12" Term="12">永結無情游，相期邈云漢。</Udef_Anchor_A>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_A RefId="6" Term="6"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;7&quot; Term=&quot;7&quot;" type="contentTagging">Udef_Anchor_A RefId="7" Term="7"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;8&quot; Term=&quot;8&quot;" type="contentTagging">Udef_Anchor_A RefId="8" Term="8"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;9&quot; Term=&quot;9&quot;" type="contentTagging">Udef_Anchor_A RefId="9" Term="9"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;10&quot; Term=&quot;10&quot;" type="contentTagging">Udef_Anchor_A RefId="10" Term="10"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;11&quot; Term=&quot;11&quot;" type="contentTagging">Udef_Anchor_A RefId="11" Term="11"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;12&quot; Term=&quot;12&quot;" type="contentTagging">Udef_Anchor_A RefId="12" Term="12"</tag></doc_user_tagging></document>
+<document filename="秋登蘭山寄張五"><corpus corpus_order="1">corpus1_A</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
+<Udef_Anchor_A RefId="13" Term="13">北山白云里，隱者自怡悅。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="14" Term="14">相望始登高，心隨雁飛滅。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="15" Term="15">愁因薄暮起，興是清秋發。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="16" Term="16">時見歸村人，沙行渡頭歇。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="17" Term="17">天邊樹若薺，江畔洲如月。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="18" Term="18">何當載酒來，共醉重陽節。</Udef_Anchor_A>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;13&quot; Term=&quot;13&quot;" type="contentTagging">Udef_Anchor_A RefId="13" Term="13"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;14&quot; Term=&quot;14&quot;" type="contentTagging">Udef_Anchor_A RefId="14" Term="14"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;15&quot; Term=&quot;15&quot;" type="contentTagging">Udef_Anchor_A RefId="15" Term="15"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;16&quot; Term=&quot;16&quot;" type="contentTagging">Udef_Anchor_A RefId="16" Term="16"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;17&quot; Term=&quot;17&quot;" type="contentTagging">Udef_Anchor_A RefId="17" Term="17"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;18&quot; Term=&quot;18&quot;" type="contentTagging">Udef_Anchor_A RefId="18" Term="18"</tag></doc_user_tagging></document>
+<document filename="送別"><corpus corpus_order="1">corpus1_A</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_A RefId="19" Term="19">下馬飲君酒，問君何所之。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="20" Term="20">君言不得意，歸臥南山陲。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="21" Term="21">但去莫复問，白云無盡時。</Udef_Anchor_A>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;19&quot; Term=&quot;19&quot;" type="contentTagging">Udef_Anchor_A RefId="19" Term="19"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;20&quot; Term=&quot;20&quot;" type="contentTagging">Udef_Anchor_A RefId="20" Term="20"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;21&quot; Term=&quot;21&quot;" type="contentTagging">Udef_Anchor_A RefId="21" Term="21"</tag></doc_user_tagging></document>
+<document filename="青溪"><corpus corpus_order="1">corpus1_A</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_A RefId="22" Term="22">言入黃花川，每逐青溪水。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="23" Term="23">隨山將万轉，趣途無百里。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="24" Term="24">聲喧亂石中，色靜深松里。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="25" Term="25">漾漾泛菱荇，澄澄映葭葦。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="26" Term="26">我心素已閒，清川澹如此。</Udef_Anchor_A>
+<Udef_Anchor_A RefId="27" Term="27">請留盤石上，垂釣將已矣。</Udef_Anchor_A>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;22&quot; Term=&quot;22&quot;" type="contentTagging">Udef_Anchor_A RefId="22" Term="22"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;23&quot; Term=&quot;23&quot;" type="contentTagging">Udef_Anchor_A RefId="23" Term="23"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;24&quot; Term=&quot;24&quot;" type="contentTagging">Udef_Anchor_A RefId="24" Term="24"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;25&quot; Term=&quot;25&quot;" type="contentTagging">Udef_Anchor_A RefId="25" Term="25"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;26&quot; Term=&quot;26&quot;" type="contentTagging">Udef_Anchor_A RefId="26" Term="26"</tag><tag default_sub_category="-" default_category="Udef_Anchor_A RefId=&quot;27&quot; Term=&quot;27&quot;" type="contentTagging">Udef_Anchor_A RefId="27" Term="27"</tag></doc_user_tagging></document><document filename="感遇·其二"><corpus corpus_order="1">corpus1_B</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
 <Udef__Anchor_B RefId="1" Term="1">江南有丹桔，經冬猶綠林。</Udef__Anchor_B>
 豈伊地气暖，自有歲寒心。
 <Udef__Anchor_B RefId="2" Term="2">可以荐佳客，奈何阻重深。</Udef__Anchor_B>
 運命唯所遇，循環不可尋。
 <Udef__Anchor_B RefId="3" Term="3">徒言樹桃李，此木豈無陰。</Udef__Anchor_B>
 </Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef__Anchor_B RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef__Anchor_B RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef__Anchor_B RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef__Anchor_B RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef__Anchor_B RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef__Anchor_B RefId="3" Term="3"</tag></doc_user_tagging></document>
-<document filename="月下獨酌"><corpus corpus_order="1">Anchor_B</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
-<Udef_Anchor_B RefId="1" Term="1">花間一壺酒，獨酌無相親。</Udef_Anchor_B>
+<document filename="月下獨酌"><corpus corpus_order="1">corpus1_B</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
+<Udef_Anchor_B RefId="4" Term="4">花間一壺酒，獨酌無相親。</Udef_Anchor_B>
 舉杯邀明月，對影成三人。
-<Udef_Anchor_B RefId="2" Term="2">月既不解飲，影徒隨我身。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="5" Term="5">月既不解飲，影徒隨我身。</Udef_Anchor_B>
 暫伴月將影，行樂須及春。
-<Udef_Anchor_B RefId="3" Term="3">我歌月徘徊，我舞影零亂。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="6" Term="6">我歌月徘徊，我舞影零亂。</Udef_Anchor_B>
 醒時同交歡，醉后各分散。
-<Udef_Anchor_B RefId="4" Term="4">永結無情游，相期邈云漢。</Udef_Anchor_B>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_B RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_B RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_B RefId="3" Term="3"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_B RefId="4" Term="4"</tag></doc_user_tagging></document>
-<document filename="秋登蘭山寄張五"><corpus corpus_order="1">Anchor_B</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
-<Udef_Anchor_B RefId="1" Term="1">北山白云里，隱者自怡悅。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="7" Term="7">永結無情游，相期邈云漢。</Udef_Anchor_B>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_B RefId="4" Term="4"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;5&quot; Term=&quot;5&quot;" type="contentTagging">Udef_Anchor_B RefId="5" Term="5"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_B RefId="6" Term="6"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;7&quot; Term=&quot;7&quot;" type="contentTagging">Udef_Anchor_B RefId="7" Term="7"</tag></doc_user_tagging></document>
+<document filename="秋登蘭山寄張五"><corpus corpus_order="1">corpus1_B</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
+<Udef_Anchor_B RefId="8" Term="8">北山白云里，隱者自怡悅。</Udef_Anchor_B>
 相望始登高，心隨雁飛滅。
-<Udef_Anchor_B RefId="2" Term="2">愁因薄暮起，興是清秋發。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="9" Term="9">愁因薄暮起，興是清秋發。</Udef_Anchor_B>
 時見歸村人，沙行渡頭歇。
-<Udef_Anchor_B RefId="3" Term="3">天邊樹若薺，江畔洲如月。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="10" Term="10">天邊樹若薺，江畔洲如月。</Udef_Anchor_B>
 何當載酒來，共醉重陽節。
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_B RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_B RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_B RefId="3" Term="3"</tag></doc_user_tagging></document>
-<document filename="送別"><corpus corpus_order="1">Anchor_B</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_B RefId="1" Term="1">下馬飲君酒，問君何所之。</Udef_Anchor_B>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;8&quot; Term=&quot;8&quot;" type="contentTagging">Udef_Anchor_B RefId="8" Term="8"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;9&quot; Term=&quot;9&quot;" type="contentTagging">Udef_Anchor_B RefId="9" Term="9"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;10&quot; Term=&quot;10&quot;" type="contentTagging">Udef_Anchor_B RefId="10" Term="10"</tag></doc_user_tagging></document>
+<document filename="送別"><corpus corpus_order="1">corpus1_B</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_B RefId="11" Term="11">下馬飲君酒，問君何所之。</Udef_Anchor_B>
 君言不得意，歸臥南山陲。
-<Udef_Anchor_B RefId="2" Term="2">但去莫复問，白云無盡時。</Udef_Anchor_B>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_B RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_B RefId="2" Term="2"</tag></doc_user_tagging></document>
-<document filename="青溪"><corpus corpus_order="1">Anchor_B</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_B RefId="1" Term="1">言入黃花川，每逐青溪水。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="12" Term="12">但去莫复問，白云無盡時。</Udef_Anchor_B>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;11&quot; Term=&quot;11&quot;" type="contentTagging">Udef_Anchor_B RefId="11" Term="11"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;12&quot; Term=&quot;12&quot;" type="contentTagging">Udef_Anchor_B RefId="12" Term="12"</tag></doc_user_tagging></document>
+<document filename="青溪"><corpus corpus_order="1">corpus1_B</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_B RefId="13" Term="13">言入黃花川，每逐青溪水。</Udef_Anchor_B>
 隨山將万轉，趣途無百里。
-<Udef_Anchor_B RefId="2" Term="2">聲喧亂石中，色靜深松里。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="14" Term="14">聲喧亂石中，色靜深松里。</Udef_Anchor_B>
 漾漾泛菱荇，澄澄映葭葦。
-<Udef_Anchor_B RefId="3" Term="3">我心素已閒，清川澹如此。</Udef_Anchor_B>
+<Udef_Anchor_B RefId="15" Term="15">我心素已閒，清川澹如此。</Udef_Anchor_B>
 請留盤石上，垂釣將已矣。
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;1&quot; Term=&quot;1&quot;" type="contentTagging">Udef_Anchor_B RefId="1" Term="1"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_B RefId="2" Term="2"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;3&quot; Term=&quot;3&quot;" type="contentTagging">Udef_Anchor_B RefId="3" Term="3"</tag></doc_user_tagging></document><document filename="感遇·其二"><corpus corpus_order="1">Anchor_C</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;13&quot; Term=&quot;13&quot;" type="contentTagging">Udef_Anchor_B RefId="13" Term="13"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;14&quot; Term=&quot;14&quot;" type="contentTagging">Udef_Anchor_B RefId="14" Term="14"</tag><tag default_sub_category="-" default_category="Udef_Anchor_B RefId=&quot;15&quot; Term=&quot;15&quot;" type="contentTagging">Udef_Anchor_B RefId="15" Term="15"</tag></doc_user_tagging></document><document filename="感遇·其二"><corpus corpus_order="1">corpus1_C</corpus><compilation/><title>感遇·其二</title><doc_source>感遇·其二</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：張九齡
 <Udef_Anchor_C RefId="1" Term="1">江南有丹桔，經冬猶綠林。
 豈伊地气暖，自有歲寒心。</Udef_Anchor_C>
 <Udef_Anchor_C RefId="2" Term="2">可以荐佳客，奈何阻重深。
 運命唯所遇，循環不可尋。
 徒言樹桃李，此木豈無陰。</Udef_Anchor_C>
 </Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging/></document>
-<document filename="月下獨酌"><corpus corpus_order="1">Anchor_C</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
-<Udef_Anchor_C RefId="1" Term="1">花間一壺酒，獨酌無相親。
+<document filename="月下獨酌"><corpus corpus_order="1">corpus1_C</corpus><compilation/><title>月下獨酌</title><doc_source>月下獨酌</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：李白
+<Udef_Anchor_C RefId="3" Term="3">花間一壺酒，獨酌無相親。
 舉杯邀明月，對影成三人。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="2" Term="2">月既不解飲，影徒隨我身。
+<Udef_Anchor_C RefId="4" Term="4">月既不解飲，影徒隨我身。
 暫伴月將影，行樂須及春。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="3" Term="3">我歌月徘徊，我舞影零亂。
+<Udef_Anchor_C RefId="5" Term="5">我歌月徘徊，我舞影零亂。
 醒時同交歡，醉后各分散。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="4" Term="4">永結無情游，相期邈云漢。</Udef_Anchor_C>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_C RefId=&quot;4&quot; Term=&quot;4&quot;" type="contentTagging">Udef_Anchor_C RefId="4" Term="4"</tag></doc_user_tagging></document>
-<document filename="秋登蘭山寄張五"><corpus corpus_order="1">Anchor_C</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
-<Udef_Anchor_C RefId="1" Term="1">北山白云里，隱者自怡悅。
+<Udef_Anchor_C RefId="6" Term="6">永結無情游，相期邈云漢。</Udef_Anchor_C>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_C RefId=&quot;6&quot; Term=&quot;6&quot;" type="contentTagging">Udef_Anchor_C RefId="6" Term="6"</tag></doc_user_tagging></document>
+<document filename="秋登蘭山寄張五"><corpus corpus_order="1">corpus1_C</corpus><compilation/><title>秋登蘭山寄張五</title><doc_source>秋登蘭山寄張五</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：孟浩然
+<Udef_Anchor_C RefId="7" Term="7">北山白云里，隱者自怡悅。
 相望始登高，心隨雁飛滅。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="2" Term="2">愁因薄暮起，興是清秋發。
+<Udef_Anchor_C RefId="8" Term="8">愁因薄暮起，興是清秋發。
 時見歸村人，沙行渡頭歇。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="3" Term="3">天邊樹若薺，江畔洲如月。
+<Udef_Anchor_C RefId="9" Term="9">天邊樹若薺，江畔洲如月。
 何當載酒來，共醉重陽節。</Udef_Anchor_C>
 </Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging/></document>
-<document filename="送別"><corpus corpus_order="1">Anchor_C</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_C RefId="1" Term="1">下馬飲君酒，問君何所之。
+<document filename="送別"><corpus corpus_order="1">corpus1_C</corpus><compilation/><title>送別</title><doc_source>送別</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_C RefId="10" Term="10">下馬飲君酒，問君何所之。
 君言不得意，歸臥南山陲。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="2" Term="2">但去莫复問，白云無盡時。</Udef_Anchor_C>
-</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_C RefId=&quot;2&quot; Term=&quot;2&quot;" type="contentTagging">Udef_Anchor_C RefId="2" Term="2"</tag></doc_user_tagging></document>
-<document filename="青溪"><corpus corpus_order="1">Anchor_C</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
-<Udef_Anchor_C RefId="1" Term="1">言入黃花川，每逐青溪水。
+<Udef_Anchor_C RefId="11" Term="11">但去莫复問，白云無盡時。</Udef_Anchor_C>
+</Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging><tag default_sub_category="-" default_category="Udef_Anchor_C RefId=&quot;11&quot; Term=&quot;11&quot;" type="contentTagging">Udef_Anchor_C RefId="11" Term="11"</tag></doc_user_tagging></document>
+<document filename="青溪"><corpus corpus_order="1">corpus1_C</corpus><compilation/><title>青溪</title><doc_source>青溪</doc_source><doctype/><docclass>-</docclass><author/><geo_level1/><geo_level2/><geo_level3/><geo_longitude/><geo_latitude/><topic/><time_orig_str/><time_dynasty/><time_era/><time_norm_year/><time_ad_date>1099990000</time_ad_date><time_ad_year>109999</time_ad_year><timeseq_type/><timeseq_number/><doc_content><Content><Paragraph>作者：王維
+<Udef_Anchor_C RefId="12" Term="12">言入黃花川，每逐青溪水。
 隨山將万轉，趣途無百里。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="2" Term="2">聲喧亂石中，色靜深松里。
+<Udef_Anchor_C RefId="13" Term="13">聲喧亂石中，色靜深松里。
 漾漾泛菱荇，澄澄映葭葦。</Udef_Anchor_C>
-<Udef_Anchor_C RefId="3" Term="3">我心素已閒，清川澹如此。
+<Udef_Anchor_C RefId="14" Term="14">我心素已閒，清川澹如此。
 請留盤石上，垂釣將已矣。</Udef_Anchor_C>
 </Paragraph></Content></doc_content><xml_metadata/><doc_user_tagging/></document>
 </documents>
