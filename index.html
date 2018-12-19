@@ -109,8 +109,8 @@ function Layout() {
 		return groupList;
 	};
 	
-	this.createBookListGroupItem = function(entryTime, entryContent) {
-		var groupItem = "<a href='# " + entryTime + "' class='list-group-item text " + entryTime 
+	this.createBookListGroupItem = function(anchor, entryContent) {
+		var groupItem = "<a href='# " + anchor + "' class='list-group-item text " + anchor 
 		+ "' onclick='moveAnchor(event)' >" + entryContent + "</a>";
 		
 		return groupItem;
@@ -895,7 +895,7 @@ function corpusToBookcase(corpus) {
 		var groupList = layout.createBookListGroup();
 		
 		for(var j = 0; j < corpus.yearBlocks[i].entrys.length; j ++) {
-			$(groupList).append(layout.createBookListGroupItem(corpus.yearBlocks[i].entrys[j].time, corpus.yearBlocks[i].entrys[j].content));
+			$(groupList).append(layout.createBookListGroupItem(corpus.yearBlocks[i].entrys[j].anchor, corpus.yearBlocks[i].entrys[j].content));
 		}
 		$(temp).append(groupList);
 	}
@@ -961,7 +961,7 @@ function buildCorpus(docList) {
             }else{
                 var tag_start = content.indexOf('<');
                 var tag_end = nthIndex(content, '>', 2);
-                entry_content = content.substr(tag_start, tag_end-tag_start-1);
+                entry_content = content.substr(tag_start, tag_end-tag_start+1);
                 content = content.substr(tag_end+1, content.length-tag_end);              
             }
             content = content.trim();
@@ -1101,7 +1101,13 @@ function moveAnchor(event) {
 	
 			
 	//--	用年分 $("." + parentBlock.className.split(" ")[3]去抓
-	var $blockArray = $("." + parentBlock.className.split(" ")[3] + ".block ");
+	// var $blockArray = $("." + parentBlock.className.split(" ")[3] + ".block ");
+	var jqAnchor = "." + event.target.className.replace(/ /g, ".");
+	$blockArray = $(jqAnchor);
+	// Move from entry to block
+	for (var i = 0; i < $blockArray.length; i++) {
+		$blockArray[i] = $blockArray[i].parentElement.parentElement;
+	}
 	
 	//--	欲移動的值 預設皆為零
 	var $anchorArray = [];
@@ -1114,33 +1120,36 @@ function moveAnchor(event) {
 	
 	
 	for(var i = 0; i < $blockArray.length; i ++) {
-		
-		var $temp = $( $blockArray[i].lastElementChild ).find(target.getDay());
+		// Find anchor under block
+		var $temp = $($blockArray[i].lastElementChild).find(jqAnchor);
 		
 		//--	targetDay HIT
 		if($temp.length > 0) {
-			if( target.getDay().split(".").length <= 5) {
-				var $onlyArray = [];
-				for(var k = 0; k < $temp.length; k ++) {
-					if( $temp[k].className.split(" ").length == 5 ) {
-						$onlyArray.push($temp[k]);
-					}
-				}
-				if($onlyArray.length > 0) $temp = $onlyArray;
-			}
+			/**
+			 * @TODO If no use, remove follow block
+			 */
+			// if( target.getDay().split(".").length <= 5) {
+			// 	var $onlyArray = [];
+			// 	for(var k = 0; k < $temp.length; k ++) {
+			// 		if( $temp[k].className.split(" ").length == 5 ) {
+			// 			$onlyArray.push($temp[k]);
+			// 		}
+			// 	}
+			// 	if($onlyArray.length > 0) $temp = $onlyArray;
+			// }
 				
 			layout.changeHitEntryColor($temp);
-			if( $blockArray[i] == parentBlock ) {
+			if( $blockArray[i] == parentBlock ) { // Same block
 				var a = $(parentBlock.parentElement).offset().top;
-				var b = $( $temp[0] ).offset().top;
+				var b = $($temp[0]).offset().top;
 				
 				if(a > b || (b - a) >  layout.height) {
 					$anchorArray[i] = $( $temp[0] ).offset().top;
 				} else {
 					$anchorArray[i] = 200 + $(parentBlock.parentElement).offset().top;
 				}
-			} else {
-				$anchorArray[i] = $( $temp[0] ).offset().top ;
+			} else { // Different block
+				$anchorArray[i] = $($temp[0]).offset().top;
 			}
 		} 
 		//--	targetDay MISS
@@ -1200,10 +1209,18 @@ function moveAnchor(event) {
 	}
 	//--	移動到該位置
 	for(var i = 0; i < $anchorArray.length; i ++) {
-		//if(parentBlock.parentElement == $(".nav-sidebar")[i]) continue;
+        //if(parentBlock.parentElement == $(".nav-sidebar")[i]) continue;
+        /**
+         * scrollTop()
+         * Get the current vertical position of the scroll bar 
+         * for the first element in the set of matched elements
+         * or set the vertical position of the scroll bar 
+         * for every matched element.
+         */
 		$($(".nav-sidebar")[i]).animate({
 			scrollTop: $( $(".nav-sidebar")[i] ).scrollTop() + $anchorArray[i] - $($(".nav-sidebar")[i]).offset().top -200
-		}, 600);
+        }, 600);
+        console.log($($(".nav-sidebar")[i]).offset().top);
 	}
 }
 
