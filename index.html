@@ -970,6 +970,11 @@ function buildCorpus(docList) {
             }
         }
     }
+
+	// For last block
+	var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp);
+	corpus.yearBlocks.push(yearBlock);
+
     return corpus;
 
     // find n-th pat
