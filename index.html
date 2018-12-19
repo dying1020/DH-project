@@ -744,6 +744,7 @@ $(document).ready(function() {
 		}
 		for (var i=0; i < queries.length; i++) {
             var query = queries[i];
+            console.log(query);
             docuSkyObj.getQueryResultDocuments(query, event, displayQueryDocList);
         }
 	});
@@ -802,43 +803,44 @@ function displayQueryDocList(channelKey) {
         
         for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
             result = docuSkyObj.channelBuffer[i].docList;
+            console.log(result);
             
             for(var j in result) {
-            var year = (result[j].docInfo.timeInfo.timeseqNumber.substr(0, result[j].docInfo.timeInfo.timeseqNumber.length -4)-100000);
+	            var title = result[j].docInfo.docFilename;
             
-                if( $queryHash[year] != undefined ) {
+                if( $queryHash[title] != undefined ) {
                     
-                    if($queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] != undefined) {
+                    if($queryHash[title][result[j].docInfo.srcFilename] != undefined) {
                     
-                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
+                        $queryHash[title][result[j].docInfo.srcFilename].push(result[j].docInfo);
                         
                     } else {	
-                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] = [];
-                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
-                        $queryHash[year].dateChNorm = result[j].docInfo.timeInfo.dateChNormYear;
-                        $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].oriTimeString = result[j].docInfo.timeInfo.dateOrigStr;
+                        $queryHash[title][result[j].docInfo.srcFilename] = [];
+                        $queryHash[title][result[j].docInfo.srcFilename].push(result[j].docInfo);
                     }	
+
                 } else {
-                    $queryHash[year] = [];
-                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber] = [];
-                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].push(result[j].docInfo);
-                    $queryHash[year].dateChNorm = result[j].docInfo.timeInfo.dateChNormYear;
-                    $queryHash[year][result[j].docInfo.timeInfo.timeseqNumber].oriTimeString = result[j].docInfo.timeInfo.dateOrigStr;
+                    $queryHash[title] = [];
+                    $queryHash[title][result[j].docInfo.srcFilename] = [];
+                    $queryHash[title][result[j].docInfo.srcFilename].push(result[j].docInfo);
+                    $queryHash[title].title = title;
                 }
             }
         }
+
+        console.log($queryHash);
         
         for(var i in $queryHash) {
-            var panelHeading = "<div class='panel panel-default queryBlock " + $queryHash[i].dateChNorm + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + $queryHash[i].dateChNorm + "</div><div class='panel-body'></div></div>";
+            var panelHeading = "<div class='panel panel-default queryBlock " + i + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + i + "</div><div class='panel-body'></div></div>";
             $("#querySidebar").append(panelHeading);
-            var temp = $("#querySidebar").find("." + $queryHash[i].dateChNorm + ".queryBlock")[0].lastElementChild;
+            var temp = $("#querySidebar").find("." + i + ".queryBlock")[0].lastElementChild;
             
             for(var j in $queryHash[i]) {
                 if($queryHash[i][j].constructor != Array().constructor)
                     continue;
-                var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
-                $(temp).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + entry.time + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
-                $(temp).append("<strong class='" + entry.time + "' > " + $queryHash[i][j].oriTimeString + "</strong>");
+                //var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
+                //$(temp).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + entry.time + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
+                $(temp).append("<strong> " + j + "</strong>");
                 
                 var groupList = document.createElement("lu");
                 groupList.className = "list-group";
@@ -1193,7 +1195,7 @@ function buildYearAnalysis() {
 	$("#yearListGroup").empty();				//--	reset
 	
 	for(var i in $queryHash) {
-		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].dateChNorm + "(" + (ObjectLength($queryHash[i])-1) + ")</a></h4></div></div>";
+		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].title + "(" + (ObjectLength($queryHash[i])-1) + ")</a></h4></div></div>";
 		var headingId = "heading" + i;
 		var collapseId = "collapse" + i;
 		$("#yearListGroup").append(panel);
@@ -1201,14 +1203,14 @@ function buildYearAnalysis() {
 		$(panel).append("<div id='" + collapseId + "' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + headingId + "'>");
 		var collapse = $(panel).find("#" + collapseId);
 		
-		for(var j in $queryHash[i]) {
+		/*for(var j in $queryHash[i]) {
 			if($queryHash[i][j].constructor == String().constructor) continue;
 			
 			var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
 			var panelBody="<div class='panel-body'><a href='#' class='" + entry.time + "' onclick='moveAnchorForQuery(event)'>" + $queryHash[i][j].oriTimeString + "(" + $queryHash[i][j].length +  ")</a></div>";
 			
 			$(collapse).append(panelBody);
-		}
+		}*/
 		
 	}
 }
