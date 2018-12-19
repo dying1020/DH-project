@@ -652,6 +652,7 @@ var $checked = [];                          //--    user checked context
 var $yearList = [];                         //--    user query year classification
 var $queryHash = [];                        //--    user query result hash<time, query result>
 var queryReadyCount = 0;                    //--    callback ready count
+var $database = [];
 
 function importFromDocuSkyCountSizeCallback(e) {
 	var target = 'USER', db = docuSkyObj.db, corpus = docuSkyObj.corpus, page = 1, pageSize = docuSkyObj.totalFound;
@@ -662,6 +663,7 @@ function importFromDocuSkyCallback() {
     console.log(docuSkyObj.totalFound);
     var corpus = buildCorpus(docuSkyObj.docList);
 	$corpus.push(corpus);
+	if ($database.indexOf(corpus.name) == -1) $database.push(corpus.name);
 	corpusToBookcase(corpus);
 }
 
@@ -732,19 +734,24 @@ $(document).ready(function() {
 	$('body').on('submit', '#searchBar', function(event) {
 		event.preventDefault(); 
 		var queries = [];
+		var dbName = [];
 		
 		for(var i = 0; i < $corpus.length; i ++) {
+
+			if (dbName.indexOf($corpus[i].name) > -1) continue;
+			else dbName.push($corpus[i].name);
+			
 			queries.push( {channelKey: i+1,
 							target: 'USER',
 							corpus: $corpus[i].corpus,
-							db: $corpus[i].db,
+							db: $corpus[i].name,
 							pageSize : 5000,
 							query: $("#query")[0].value} 
 			);
 		}
 		for (var i=0; i < queries.length; i++) {
             var query = queries[i];
-            console.log(query);
+            //console.log(query);
             docuSkyObj.getQueryResultDocuments(query, event, displayQueryDocList);
         }
 	});
@@ -796,14 +803,14 @@ $(document).ready(function() {
 function displayQueryDocList(channelKey) {
     queryReadyCount ++;
 
-    if(queryReadyCount == $corpus.length) {		//--	all query result ready
+    if(queryReadyCount == $database.length) {		//--	all query result ready
         queryReadyCount = 0;
         layout.cleanQueryResult();
         $queryHash = [];
         
         for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
             result = docuSkyObj.channelBuffer[i].docList;
-            console.log(result);
+            //console.log(result);
             
             for(var j in result) {
 	            var title = result[j].docInfo.docFilename;
@@ -828,7 +835,7 @@ function displayQueryDocList(channelKey) {
             }
         }
 
-        console.log($queryHash);
+        //console.log($queryHash);
         
         for(var i in $queryHash) {
             var panelHeading = "<div class='panel panel-default queryBlock " + i + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + i + "</div><div class='panel-body'></div></div>";
@@ -840,14 +847,16 @@ function displayQueryDocList(channelKey) {
                     continue;
                 //var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
                 //$(temp).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + entry.time + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
-                $(temp).append("<strong> " + j + "</strong>");
+                
+                $(temp).append("<strong> " + findDatabase(j) + "</strong>");
                 
                 var groupList = document.createElement("lu");
                 groupList.className = "list-group";
+
                 for(var k in $queryHash[i][j]) {
                     if($queryHash[i][j][k].constructor == String().constructor)
                         continue;
-                    $(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
+                    //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
                     var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace($("#query")[0].value,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
                     $(groupList).append(block);
                 }
@@ -857,6 +866,19 @@ function displayQueryDocList(channelKey) {
         layout.showQueryRow();
         buildYearAnalysis();
     }
+}
+
+
+//--    find database name by xml source file name
+function findDatabase(dbSrcFileName) {
+	var database = "";
+    for(var i = 0; i < $corpus.length; i ++) {
+		if ($corpus[i].db == dbSrcFileName) {
+			database = $corpus[i].name;	
+			break;
+		}	
+	}
+	return database;
 }
 
 //--    build book panel by corpus
@@ -885,7 +907,7 @@ function corpusToBookcase(corpus) {
 
 //--    build corpus by docusky docList
 function buildCorpus(docList) {
-	var corpus = new Corpus(docList[0].docInfo.corpus, docuSkyObj.db, docList[0].docInfo.corpus);
+	var corpus = new Corpus(docuSkyObj.db, docList[0].docInfo.srcFilename, docList[0].docInfo.corpus);
     var judge = docList[0].docInfo.docTitleXml; // 吃<title>這個tag
 	var yearCandidate = [];
 	
