@@ -662,10 +662,15 @@ function importFromDocuSkyCountSizeCallback(e) {
 
 function importFromDocuSkyCallback() {
     console.log(docuSkyObj.totalFound);
-    var corpus = buildCorpus(docuSkyObj.docList);
-	$corpus.push(corpus);
-	if ($database.indexOf(corpus.name) == -1) $database.push(corpus.name);
-	corpusToBookcase(corpus);
+    console.log(docuSkyObj.docList);
+    var corpusArray = buildCorpus(docuSkyObj.docList);
+    
+    for (var name in corpusArray) {
+    	$corpus.push(corpusArray[name].corpus);
+    	corpusToBookcase(corpusArray[name].corpus);
+    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) $database.push(corpusArray[name].corpus.name);
+    }
+	console.log($corpus);
 }
 
 var setDocuSkyRef = function() {
@@ -908,13 +913,33 @@ function corpusToBookcase(corpus) {
 
 //--    build corpus by docusky docList
 function buildCorpus(docList) {
-	var corpus = new Corpus(docuSkyObj.db, docList[0].docInfo.srcFilename, docList[0].docInfo.corpus);
-    var judge = docList[0].docInfo.docTitleXml; // 吃<title>這個tag
-	var yearCandidate = [];
+
+	// find all corpus in one database
+	var corpus = [];
+	var names = [];
+
+	for (var i=0; i<docList.length; i++) {
+		var corpusName = docList[i].docInfo.corpus;
+		if (names.indexOf(corpusName) == -1){
+			corpus[corpusName] = [];
+			corpus[corpusName].corpus = new Corpus(docuSkyObj.db, docList[i].docInfo.srcFilename, corpusName);
+			corpus[corpusName].judge = docList[i].docInfo.docTitleXml; // 吃<title>這個tag
+			corpus[corpusName].yearCandidate = [];
+			corpus[corpusName].temp = [];
+			names.push(corpusName);
+		}
+	}
+
+	//var corpus = new Corpus(docuSkyObj.db, docList[0].docInfo.srcFilename, docList[0].docInfo.corpus);
+   // var judge = docList[0].docInfo.docTitleXml; // 吃<title>這個tag
+	//var yearCandidate = [];
 	
-	var temp = [];
+	//var temp = [];
 
     for(var i = 0; i < docList.length; i ++) {
+
+    	var corpusName = docList[i].docInfo.corpus;
+    	
     //--    有沒有專屬的time
         //var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
         var content = docList[i].docInfo.docContentXml;
@@ -967,20 +992,20 @@ function buildCorpus(docList) {
             content = content.trim();
             var entry = new Entry(entry_content);
 
-            if(yearCandidate[entry.year]) {
-                    yearCandidate[entry.year] += 1;
+            if(corpus[corpusName].yearCandidate[entry.year]) {
+                    corpus[corpusName].yearCandidate[entry.year] += 1;
                 } else {
-                    yearCandidate[entry.year] = 1;
+                    corpus[corpusName].yearCandidate[entry.year] = 1;
                 }
                
-            if(docList[i].docInfo.docTitleXml != judge) {
-                var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp);
+            if(docList[i].docInfo.docTitleXml != corpus[corpusName].judge) {
+                var yearBlock = new YearBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
 
-                corpus.yearBlocks.push(yearBlock);
-                judge = docList[i].docInfo.docTitleXml;
+                corpus[corpusName].corpus.yearBlocks.push(yearBlock);
+                corpus[corpusName].judge = docList[i].docInfo.docTitleXml;
                 
-                temp = [];
-                temp.push(entry);
+                corpus[corpusName].temp = [];
+                corpus[corpusName].temp.push(entry);
                 //yearCandidate = [];
                 //yearCandidate[ entry.year ] = 1;
             } else {
@@ -989,14 +1014,16 @@ function buildCorpus(docList) {
                 } else {
                     yearCandidate[entry.year] = 1;
                 }*/
-                temp.push(entry);
+                corpus[corpusName].temp.push(entry);
             }
         }
     }
 
 	// For last block
-	var yearBlock = new YearBlock(judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), temp);
-	corpus.yearBlocks.push(yearBlock);
+	for (var corpusName in corpus) {
+		var yearBlock = new YearBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
+		corpus[corpusName].corpus.yearBlocks.push(yearBlock);
+	}
 
     return corpus;
 
