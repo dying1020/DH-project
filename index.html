@@ -189,7 +189,6 @@ function Layout() {
 	//--	adjust bookcase layout
 	this.adjustBook = function() {
 		$bookcase.push($(".book").last()[0]);
-		console.log($bookcase);
 		var num = $(".book").length;
 		var numOfBlock = 12/num;
 		for(var i = 0; i < num; i ++) {
@@ -653,7 +652,7 @@ var saver = new Saver();
 var $corpus = [];                           //--    user import corpus
 var $bookcase = [];                         //--    user bookcase
 var $checked = [];                          //--    user checked database
-var $anchorChecked = [];
+var $anchorOfBookcase = [];
 var $yearList = [];                         //--    user query year classification
 var $queryHash = [];                        //--    user query result hash<time, query result>
 var queryReadyCount = 0;                    //--    callback ready count
@@ -671,14 +670,16 @@ function importFromDocuSkyCallback() {
     for (var name in corpusArray) {
     	$corpus.push(corpusArray[name].corpus);
     	corpusToBookcase(corpusArray[name].corpus);
+    	$anchorOfBookcase.push([]);
+    	$anchorOfBookcase[$anchorOfBookcase.length-1].name = corpusArray[name].corpus.corpus;
     	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
     		$database.push(corpusArray[name].corpus.name);
     		$checked.push(true);
+    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = true;
+    	} else {
+    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
     	}
-    	if ($database.length == 1) {
-    		if ($anchorChecked.length == 0) $anchorChecked.push(true);
-    		else $anchorChecked.push(false);
-    	}
+    	
     }
 }
 
@@ -915,6 +916,7 @@ function corpusToBookcase(corpus) {
 	}
 	layout.adjustBook();
 	layout.addBookCheckBox(corpus.name);
+	show_page();
 	//layout.addAnchorRadio("hi");
 	adjustYearList();
 }
@@ -1098,22 +1100,53 @@ function adjustYearList() {
 //--	select book in corpus
 function show_page(span) {
 
-	var $label = span.children;
+	var $label;
 	var count = 0;
+	var anchorNum = $anchorOfBookcase.length/$database.length;
+
+	if (span==null){
+
+		for (var i=0; i<$checked.length; i++) {
+			if ($checked[i]) count++;
+		}
+
+
+	} else {
+		$label = span.children;
+
+		// check select state in "choose database"
+		for(var i = 1; i < $label.length; i ++) {
+			var flag = $label[i].children[0].checked;
+			if( flag == true) {
+				$checked[i-1] = true;
+				count ++;
+			} else {
+				$checked[i-1] = false;
+			}
+		}
+
+	}
 	
-	for(var i = 1; i < $label.length; i ++) {
-		var flag = $label[i].children[0].checked;
-		if( flag == true) {
-			$checked[i-1] = true;
-			count += $anchorChecked.length;
+
+	// check select state in "choose anchor"
+	/*for (var i=1; i < $anchorLabel.length; i++) {
+		var flag = $anchorLabel[i].children[0].checked;
+		if (flag == true) {
+			setAnchor($anchorLabel[i].innerText, true);
 		} else {
-			$checked[i-1] = false;
+			setAnchor($anchorLabel[i].innerText, false);
 		}
 	}
 	
+	// TODO: write the new function to reset the bool values in $anchorOfBookcase
+	
+	*/
+	
 	var numOfBlock = 12/count;
 	for(i = 0; i < $bookcase.length; i ++) {
-		if($checked[Math.floor(i/$anchorChecked.length)] == true) {
+
+		// choose database and choose anchor
+		if($checked[Math.floor(i/anchorNum)] == true && $anchorOfBookcase[i].checked == true) {
 			$("#bookContainer").append($bookcase[i]);
 			$($bookcase[i]).attr('class', 'book col-sm-' + numOfBlock + ' content');
 		} else {
