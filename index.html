@@ -117,8 +117,10 @@ function Layout() {
 	};
 	
 	this.addBookCheckBox = function(corpusName) {
-		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
-		+ corpusName + "</label>");
+		if ($database.indexOf(corpusName) == -1) {
+			$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
+			+ corpusName + "</label>");
+		}
 	};
 	this.addAnchorRadio = function(anchorsName) {
 		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='radio' name = 'anchor' value='1' >" + anchorsName +	"</radio>");
@@ -187,6 +189,7 @@ function Layout() {
 	//--	adjust bookcase layout
 	this.adjustBook = function() {
 		$bookcase.push($(".book").last()[0]);
+		console.log($bookcase);
 		var num = $(".book").length;
 		var numOfBlock = 12/num;
 		for(var i = 0; i < num; i ++) {
@@ -649,7 +652,8 @@ var layout = new Layout();
 var saver = new Saver();
 var $corpus = [];                           //--    user import corpus
 var $bookcase = [];                         //--    user bookcase
-var $checked = [];                          //--    user checked context
+var $checked = [];                          //--    user checked database
+var $anchorChecked = [];
 var $yearList = [];                         //--    user query year classification
 var $queryHash = [];                        //--    user query result hash<time, query result>
 var queryReadyCount = 0;                    //--    callback ready count
@@ -662,15 +666,20 @@ function importFromDocuSkyCountSizeCallback(e) {
 
 function importFromDocuSkyCallback() {
     console.log(docuSkyObj.totalFound);
-    console.log(docuSkyObj.docList);
     var corpusArray = buildCorpus(docuSkyObj.docList);
     
     for (var name in corpusArray) {
     	$corpus.push(corpusArray[name].corpus);
     	corpusToBookcase(corpusArray[name].corpus);
-    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) $database.push(corpusArray[name].corpus.name);
+    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
+    		$database.push(corpusArray[name].corpus.name);
+    		$checked.push(true);
+    	}
+    	if ($database.length == 1) {
+    		if ($anchorChecked.length == 0) $anchorChecked.push(true);
+    		else $anchorChecked.push(false);
+    	}
     }
-	console.log($corpus);
 }
 
 var setDocuSkyRef = function() {
@@ -904,7 +913,6 @@ function corpusToBookcase(corpus) {
 		}
 		$(temp).append(groupList);
 	}
-	$checked.push(true);
 	layout.adjustBook();
 	layout.addBookCheckBox(corpus.name);
 	//layout.addAnchorRadio("hi");
@@ -1089,6 +1097,7 @@ function adjustYearList() {
 
 //--	select book in corpus
 function show_page(span) {
+
 	var $label = span.children;
 	var count = 0;
 	
@@ -1096,7 +1105,7 @@ function show_page(span) {
 		var flag = $label[i].children[0].checked;
 		if( flag == true) {
 			$checked[i-1] = true;
-			count ++;
+			count += $anchorChecked.length;
 		} else {
 			$checked[i-1] = false;
 		}
@@ -1104,8 +1113,7 @@ function show_page(span) {
 	
 	var numOfBlock = 12/count;
 	for(i = 0; i < $bookcase.length; i ++) {
-	
-		if($checked[i] == true) {
+		if($checked[Math.floor(i/$anchorChecked.length)] == true) {
 			$("#bookContainer").append($bookcase[i]);
 			$($bookcase[i]).attr('class', 'book col-sm-' + numOfBlock + ' content');
 		} else {
