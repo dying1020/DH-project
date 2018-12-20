@@ -873,7 +873,9 @@ function displayQueryDocList(channelKey) {
                     if($queryHash[i][j][k].constructor == String().constructor)
                         continue;
                     //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
-                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace($("#query")[0].value,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
+
+                    var queryReplace = new RegExp($("#query")[0].value, 'g');
+                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
                     $(groupList).append(block);
                 }
                 $(temp).append(groupList);
