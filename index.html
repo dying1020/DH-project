@@ -117,10 +117,8 @@ function Layout() {
 	};
 	
 	this.addBookCheckBox = function(corpusName) {
-		if ($database.indexOf(corpusName) == -1) {
-			$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
-			+ corpusName + "</label>");
-		}
+		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
+		+ corpusName + "</label>");
 	};
 	this.addAnchorRadio = function(anchorsName) {
 		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='radio' name = 'anchor' value='1' >" + anchorsName +	"</radio>");
@@ -558,7 +556,7 @@ function Saver() {
 								<div role="tabpanel" >
 								  <!-- Nav tabs -->
 									<ul class="nav nav-tabs" role="tablist">
-										<li role="presentation" class="active"><a href="#yearList" aria-controls="yearList" role="tab" data-toggle="tab">時間</a></li>
+										<li role="presentation" class="active"><a href="#yearList" aria-controls="yearList" role="tab" data-toggle="tab">標題</a></li>
 									</ul>
 									<div class="tab-content">
 										<div role='tabpanel' class='tab-pane active panel-body' id="yearList" >
@@ -666,20 +664,41 @@ function importFromDocuSkyCountSizeCallback(e) {
 function importFromDocuSkyCallback() {
     console.log(docuSkyObj.totalFound);
     var corpusArray = buildCorpus(docuSkyObj.docList);
+    var firstDatabase = ($database.length==0) ?true :false;
+    var nowAnchor = (firstDatabase) ?null :searchNowAnchor();
     
     for (var name in corpusArray) {
     	$corpus.push(corpusArray[name].corpus);
-    	corpusToBookcase(corpusArray[name].corpus);
+    	var anchorName = corpusArray[name].corpus.corpus.split('_')[1];
     	$anchorOfBookcase.push([]);
-    	$anchorOfBookcase[$anchorOfBookcase.length-1].name = corpusArray[name].corpus.corpus;
-    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
-    		$database.push(corpusArray[name].corpus.name);
-    		$checked.push(true);
-    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = true;
-    	} else {
-    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
-    	}
-    	
+    	$anchorOfBookcase[$anchorOfBookcase.length-1].name = anchorName;
+
+    	if (firstDatabase){
+	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
+	    		$database.push(corpusArray[name].corpus.name);
+	    		layout.addBookCheckBox(corpusArray[name].corpus.name);
+	    		$checked.push([]);
+	    		$checked[$checked.length-1].name = corpusArray[name].corpus.name;
+	    		$checked[$checked.length-1].checked = true;
+	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = true;
+	    	} else {
+	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
+	    	}
+	    } else {
+	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
+	    		$database.push(corpusArray[name].corpus.name);
+	    		layout.addBookCheckBox(corpusArray[name].corpus.name);
+	    		$checked.push([]);
+	    		$checked[$checked.length-1].name = corpusArray[name].corpus.name;
+	    		$checked[$checked.length-1].checked = true;
+	    	}
+	    	if (anchorName==nowAnchor) {
+	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = true;
+	    	} else {
+	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
+	    	}
+	    }
+    	corpusToBookcase(corpusArray[name].corpus);
     }
 }
 
@@ -750,12 +769,11 @@ $(document).ready(function() {
 	$('body').on('submit', '#searchBar', function(event) {
 		event.preventDefault(); 
 		var queries = [];
-		var dbName = [];
+		var nowAnchor = searchNowAnchor();
 		
 		for(var i = 0; i < $corpus.length; i ++) {
-
-			if (dbName.indexOf($corpus[i].name) > -1) continue;
-			else dbName.push($corpus[i].name);
+			if (!ifDBDisplay($corpus[i].name)) continue;
+			if ($corpus[i].corpus.split('_')[1]!=nowAnchor) continue;
 			
 			queries.push( {channelKey: i+1,
 							target: 'USER',
@@ -815,7 +833,22 @@ $(document).ready(function() {
                         //*										  *
                         //*										  *
                         //*****************************************
-                
+function searchNowAnchor() {
+	for (var i=0; i<$anchorOfBookcase.length; i++){
+		if ($anchorOfBookcase[i].checked){
+			return $anchorOfBookcase[i].name;
+		}
+	}
+} 
+
+function ifDBDisplay(dbName) {
+	for (var i=0; i<$checked.length; i++){
+		if ($checked[i].name==dbName){
+			return $checked[i].checked;
+		} 
+	}
+}               
+
 function displayQueryDocList(channelKey) {
     queryReadyCount ++;
 
@@ -857,6 +890,7 @@ function displayQueryDocList(channelKey) {
             var panelHeading = "<div class='panel panel-default queryBlock " + i + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + i + "</div><div class='panel-body'></div></div>";
             $("#querySidebar").append(panelHeading);
             var temp = $("#querySidebar").find("." + i + ".queryBlock")[0].lastElementChild;
+            var resultCount = 0;
             
             for(var j in $queryHash[i]) {
                 if($queryHash[i][j].constructor != Array().constructor)
@@ -875,11 +909,14 @@ function displayQueryDocList(channelKey) {
                     //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
 
                     var queryReplace = new RegExp($("#query")[0].value, 'g');
+                    var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
                     var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
                     $(groupList).append(block);
+                    resultCount += queryResult.length;
                 }
                 $(temp).append(groupList);
             }	
+            $queryHash[i].count = resultCount;
         }
         layout.showQueryRow();
         buildYearAnalysis();
@@ -917,7 +954,6 @@ function corpusToBookcase(corpus) {
 		$(temp).append(groupList);
 	}
 	layout.adjustBook();
-	layout.addBookCheckBox(corpus.name);
 	show_page();
 	//layout.addAnchorRadio("hi");
 	adjustYearList();
@@ -1109,7 +1145,7 @@ function show_page(span) {
 	if (span==null){
 
 		for (var i=0; i<$checked.length; i++) {
-			if ($checked[i]) count++;
+			if ($checked[i].checked) count++;
 		}
 
 
@@ -1120,10 +1156,10 @@ function show_page(span) {
 		for(var i = 1; i < $label.length; i ++) {
 			var flag = $label[i].children[0].checked;
 			if( flag == true) {
-				$checked[i-1] = true;
+				$checked[i-1].checked = true;
 				count ++;
 			} else {
-				$checked[i-1] = false;
+				$checked[i-1].checked = false;
 			}
 		}
 
@@ -1148,7 +1184,7 @@ function show_page(span) {
 	for(i = 0; i < $bookcase.length; i ++) {
 
 		// choose database and choose anchor
-		if($checked[Math.floor(i/anchorNum)] == true && $anchorOfBookcase[i].checked == true) {
+		if($checked[Math.floor(i/anchorNum)].checked == true && $anchorOfBookcase[i].checked == true) {
 			$("#bookContainer").append($bookcase[i]);
 			$($bookcase[i]).attr('class', 'book col-sm-' + numOfBlock + ' content');
 		} else {
@@ -1309,7 +1345,7 @@ function buildYearAnalysis() {
 	$("#yearListGroup").empty();				//--	reset
 	
 	for(var i in $queryHash) {
-		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].title + "(" + (ObjectLength($queryHash[i])-1) + ")</a></h4></div></div>";
+		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].title + "(" + $queryHash[i].count + ")</a></h4></div></div>";
 		var headingId = "heading" + i;
 		var collapseId = "collapse" + i;
 		$("#yearListGroup").append(panel);
