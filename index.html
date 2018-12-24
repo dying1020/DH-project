@@ -945,7 +945,7 @@ function corpusToBookcase(corpus) {
 	for(i = 0; i < corpus.yearBlocks.length; i ++) {
 		
 		box.append( layout.createBookPanel(corpus.yearBlocks[i].title) );
-		var temp = box.find("div." + corpus.yearBlocks[i].title)[0];
+		var temp = box.find("div." + corpus.yearBlocks[i].title.replace(/([.#])/, '\\$1'))[0];
 		var groupList = layout.createBookListGroup();
 		
 		for(var j = 0; j < corpus.yearBlocks[i].entrys.length; j ++) {
@@ -1202,8 +1202,9 @@ function moveAnchor(event) {
 	var parentBlock = event.target.parentElement.parentElement;
 	// DH project
 	// var $timeArray = event.target.hash.split(" ");
-	var $timeArray = event.target.hash.split("%20");
-	var target = new Target($timeArray[1], $timeArray[2], $timeArray[3], $timeArray);
+	var $anchorArray = event.target.hash.split("%20"); // [0]: #, [1]: Udef anchor class, [2]: anchor id
+	var anchorClass = $anchorArray[1];
+	var target = new Target($anchorArray[1], $anchorArray[2], $anchorArray[3], $anchorArray);
 	
 			
 	//--	用年分 $("." + parentBlock.className.split(" ")[3]去抓
@@ -1222,7 +1223,13 @@ function moveAnchor(event) {
 	}
 	//--	消除上一次點選所標記的
 	layout.cleanHitEntryColor();
-	layout.cleanMissEntryColor();	
+	layout.cleanMissEntryColor();
+
+	// Return if click on default anchor
+	if (anchorClass == "Udef_default_anchor") {
+		layout.changeHitEntryColor([event.target]);
+		return;
+	}
 	
 	
 	for(var i = 0; i < $blockArray.length; i ++) {
