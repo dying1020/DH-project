@@ -1201,17 +1201,27 @@ function changeAnchor(span) {
 	} else {
 		var $label = span.children;
 		// check select state in "choose database"
-		for(var i = 1; i < $label.length; i ++) {
+		var ancName;
+		for(var i = 1; i < $label.length; i++) {
 			var flag = $label[i].children[0].checked;
 			if( flag == true) {
-				$anchorOfBookcase[i-1].checked = true;
-			} else {
-				$anchorOfBookcase[i-1].checked = false;
+				ancName = $label[i].children[0].value;
 			}
 		}
+		for(i = 0; i < $anchorOfBookcase.length; i++){
+			if($anchorOfBookcase[i].name == ancName){
+				$anchorOfBookcase[i].checked = true;
+			}
+			else{
+				$anchorOfBookcase[i].checked = false;
+			}
+		}
+	//			$anchorOfBookcase[i-1].checked = false;
 
 	}
+	layout.adjustBook();
 	show_page();
+	adjustYearList();
 }
 
 function moveAnchor(event) {
