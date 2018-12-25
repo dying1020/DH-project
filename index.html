@@ -121,7 +121,7 @@ function Layout() {
 		+ corpusName + "</label>");
 	};
 	this.addAnchorRadio = function(anchorsName) {
-		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='radio' name = 'anchor' value='1' >" + anchorsName +	"</radio>");
+		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='radio-inline'><input type='radio' name = 'anchor' value=" + anchorsName + " >" + anchorsName +	"</radio>");
 	}
 	
 	
@@ -514,10 +514,7 @@ function Saver() {
 					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="show_page(this.parentElement)" >選擇文本</button>
 				</span>
 				<span id="anchors" >
-					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="change_anchor(this.parentElement)" >選擇錨點</button>
-					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='0' >錨點1 </radio>
-					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='1' >錨點2 </radio>
-					<radio style='font-size:16px;margin-top:7px' class = 'radio-inline'> <input type='radio' name = 'anchor' value='2' >錨點3 </radio>
+					<button style='margin-top:7px;margin-left:50px' type="button" class="btn btn-primary" onclick="changeAnchor(this.parentElement)" >選擇錨點</button>
 				</span>
 				<span style='float:right'>
                     <button style='margin-top:7px;' type="button" class="btn btn-primary" onclick="layout.showBookRow()" > -對讀頁面</button>
@@ -684,6 +681,7 @@ function importFromDocuSkyCallback() {
 	    	} else {
 	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
 	    	}
+			layout.addAnchorRadio(anchorName);
 	    } else {
 	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
 	    		$database.push(corpusArray[name].corpus.name);
@@ -955,7 +953,6 @@ function corpusToBookcase(corpus) {
 	}
 	layout.adjustBook();
 	show_page();
-	//layout.addAnchorRadio("hi");
 	adjustYearList();
 }
 
@@ -1177,7 +1174,7 @@ function show_page(span) {
 	}
 	
 	// TODO: write the new function to reset the bool values in $anchorOfBookcase
-	
+		
 	*/
 	
 	var numOfBlock = 12/count;
@@ -1194,6 +1191,27 @@ function show_page(span) {
 }
 
 function changeAnchor(span) {
+	if (span==null){
+
+		for (var i=0; i<$checked.length; i++) {
+			if ($checked[i].checked) count++;
+		}
+
+
+	} else {
+		var $label = span.children;
+		// check select state in "choose database"
+		for(var i = 1; i < $label.length; i ++) {
+			var flag = $label[i].children[0].checked;
+			if( flag == true) {
+				$anchorOfBookcase[i-1].checked = true;
+			} else {
+				$anchorOfBookcase[i-1].checked = false;
+			}
+		}
+
+	}
+	show_page();
 }
 
 function moveAnchor(event) {
