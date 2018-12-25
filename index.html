@@ -969,7 +969,7 @@ function buildCorpus(docList) {
 			corpus[corpusName] = [];
 			corpus[corpusName].corpus = new Corpus(docuSkyObj.db, docList[i].docInfo.srcFilename, corpusName);
 			var judge = parseTitle(docList[i].docInfo.docTitleXml);
-			corpus[corpusName].judge = docList[i].docInfo.docTitleXml; // 吃<title>這個tag
+			corpus[corpusName].judge = parseTitle(docList[i].docInfo.docTitleXml); // 吃<title>這個tag
 			corpus[corpusName].yearCandidate = [];
 			corpus[corpusName].temp = [];
 			names.push(corpusName);
@@ -1030,14 +1030,9 @@ function buildCorpus(docList) {
                 
                 corpus[corpusName].temp = [];
                 corpus[corpusName].temp.push(entry);
-                //yearCandidate = [];
-                //yearCandidate[ entry.year ] = 1;
+
             } else {
-                /*if(yearCandidate[entry.year]) {
-                    yearCandidate[entry.year] += 1;
-                } else {
-                    yearCandidate[entry.year] = 1;
-                }*/
+
                 corpus[corpusName].temp.push(entry);
             }
         }
@@ -1065,24 +1060,16 @@ function buildCorpus(docList) {
     	if(title.includes('_p')){
 			var idx = title.indexOf('_p');
 			var pstr = title.substr(idx, 6);
-			if(isNaN(pstr)){
-				title.replace(pstr, "");
+			if(isNaN(pstr.substr(1)) == true){
+				title = title.replace(pstr, "");
+			}else{
+				title = pstr + title;
 			}
 		}
     	return title;
 
     }
 
-	
-	/*function findMaxyearCandidateAdd(yearCandidate) {
-	var max = 0;
-		for(var i in yearCandidate) {
-			if( yearCandidate[i] > max) max = yearCandidate[i];
-		}
-		for(var i in yearCandidate) {
-			if( yearCandidate[i] == max ) return i;
-		}
-	}*/
 }
 
 //--    Bookmarks builder
