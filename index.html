@@ -968,6 +968,7 @@ function buildCorpus(docList) {
 		if (names.indexOf(corpusName) == -1){
 			corpus[corpusName] = [];
 			corpus[corpusName].corpus = new Corpus(docuSkyObj.db, docList[i].docInfo.srcFilename, corpusName);
+			var judge = parseTitle(docList[i].docInfo.docTitleXml);
 			corpus[corpusName].judge = docList[i].docInfo.docTitleXml; // 吃<title>這個tag
 			corpus[corpusName].yearCandidate = [];
 			corpus[corpusName].temp = [];
@@ -992,29 +993,6 @@ function buildCorpus(docList) {
         content = content.split("</Content>").join("");
         content = content.split("</Paragraph>").join("");
         
-        /*
-        var j = 1;
-        while(true){
-
-        	var tag_start = nthIndex(content, '<', j);
-        	var tag_end = nthIndex(content, '>', j);
-
-        	if(tag_start <0 || tag_end < 0) break;
-
-        	var tag = content.substr(tag_start, tag_end-tag_start+1);
-        	//judge = tag + judge;
-        	//break;
-
-        	if(tag.includes('Udef_')) j++;
-        	else{
-        		content = content.replace(/tag/g, "");
-        		break;
-
-        	}
-
-
-        }*/
-
         content = content.trim();
         while(content.trim().length>1){          
             var entry_content = 0;
@@ -1043,11 +1021,12 @@ function buildCorpus(docList) {
                     corpus[corpusName].yearCandidate[entry.year] = 1;
                 }
                
-            if(docList[i].docInfo.docTitleXml != corpus[corpusName].judge) {
+            var doctitle = parseTitle(docList[i].docInfo.docTitleXml);
+            if(doctitle != corpus[corpusName].judge) {
                 var yearBlock = new YearBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
 
                 corpus[corpusName].corpus.yearBlocks.push(yearBlock);
-                corpus[corpusName].judge = docList[i].docInfo.docTitleXml;
+                corpus[corpusName].judge = doctitle;
                 
                 corpus[corpusName].temp = [];
                 corpus[corpusName].temp.push(entry);
@@ -1080,6 +1059,18 @@ function buildCorpus(docList) {
             if (i < 0) break;
         }
         return i;
+    }
+
+    function parseTitle(title){
+    	if(title.includes('_p')){
+			var idx = title.indexOf('_p');
+			var pstr = title.substr(idx, 6);
+			if(isNaN(pstr)){
+				title.replace(pstr, "");
+			}
+		}
+    	return title;
+
     }
 
 	
