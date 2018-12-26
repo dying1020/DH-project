@@ -213,6 +213,7 @@ function Corpus(name, db, corpus) {
 	this.name = name;
 	this.db = db;
 	this.corpus = corpus;
+	this.anchor = "";
 	this.yearBlocks = [];
 }
 //--	3.Entry Object : The unit of the stored context-entry.
@@ -666,7 +667,7 @@ function importFromDocuSkyCallback() {
     
     for (var name in corpusArray) {
     	$corpus.push(corpusArray[name].corpus);
-    	var anchorName = corpusArray[name].corpus.corpus.split('_')[1];
+    	var anchorName = corpusArray[name].corpus.anchor;
     	$anchorOfBookcase.push([]);
     	$anchorOfBookcase[$anchorOfBookcase.length-1].name = anchorName;
 
@@ -771,7 +772,7 @@ $(document).ready(function() {
 		
 		for(var i = 0; i < $corpus.length; i ++) {
 			if (!ifDBDisplay($corpus[i].name)) continue;
-			if ($corpus[i].corpus.split('_')[1]!=nowAnchor) continue;
+			if ($corpus[i].anchor!=nowAnchor) continue;
 			
 			queries.push( {channelKey: i+1,
 							target: 'USER',
@@ -783,7 +784,6 @@ $(document).ready(function() {
 		}
 		for (var i=0; i < queries.length; i++) {
             var query = queries[i];
-            //console.log(query);
             docuSkyObj.getQueryResultDocuments(query, event, displayQueryDocList);
         }
 	});
@@ -985,6 +985,7 @@ function buildCorpus(docList) {
     for(var i = 0; i < docList.length; i ++) {
 
     	var corpusName = docList[i].docInfo.corpus;
+    	var anchorName = "";
     	
     //--    有沒有專屬的time
         //var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
@@ -1014,6 +1015,7 @@ function buildCorpus(docList) {
             }
             content = content.trim();
             var entry = new Entry(entry_content);
+            if (entry.anchor!="Udef_default_anchor") anchorName = entry.anchor.split(' ')[0].split('_')[2];
 
             if(corpus[corpusName].yearCandidate[entry.year]) {
                     corpus[corpusName].yearCandidate[entry.year] += 1;
@@ -1036,6 +1038,7 @@ function buildCorpus(docList) {
                 corpus[corpusName].temp.push(entry);
             }
         }
+        corpus[corpusName].corpus.anchor = anchorName;
     }
 
 	// For last block
