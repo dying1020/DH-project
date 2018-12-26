@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Paragraph to Anchor</title>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/FileSaver.min.js"></script>
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">Home</a></li>
+                    <li role="presentation"><a href="#tutorial">Tutorial</a></li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Paragraph to Anchor</h3>
+        </div>
+        
+        <div class="jumbotron">
+            <div class="form-group">
+                <label class="control-label" for="files">Markus 輸出檔案</label>
+                <input type="file" id="files" name="files[]" multiple />
+                <p class="help-block" id="list"></p>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="anchorClass">錨點類別 Anchor class</label>
+                <input type="text" class="form-control" id="anchorClass" placeholder="ex. Anchor_A">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="prefix">錨點編號前綴 Prefix of anchor id (optional)</label>
+                <input type="text" class="form-control" id="prefix" placeholder="ex. chap1">
+            </div>
+            <button class="btn btn-default" id="save">儲存</button>
+        </div>
+
+        
+        <div class="row" style="margin-top: 500px;">
+            <h2 id="tutorial">Tutorial</h2>
+            <h3 style="margin-bottom: 20px;">Markus 標記段落</h3>
+            <h4>Step 1: 打開 Markus 載入文字檔</h4>
+            <img src="img/para2anchor/1.png" class="img-responsive" alt="Responsive image">
+            <h4>Step 2: 載入文字檔後選擇自動標記</h4>
+            <img src="img/para2anchor/2.png" class="img-responsive" alt="Responsive image">
+            <h4>Step 3: 勾選自動分段，預設以一行空白行當作分段點</h4>
+            <img src="img/para2anchor/3.png" class="img-responsive" alt="Responsive image">
+            <h4>Step 4: 自動分段後，選擇 Markus file 輸出</h4>
+            <img src="img/para2anchor/4.png" class="img-responsive" alt="Responsive image">
+
+            <h3 style="margin-bottom: 20px;">段落轉換成錨點</h3>
+            <h4>Step 1: 打開 Paragraph to Anchor</h4>
+            <img src="img/para2anchor/5.png" class="img-responsive" alt="Responsive image">
+            <h4>Step 2: 載入 Markus 輸出檔，可以同時載入多份對應錨點的檔案</h4>
+            <h5>例如：同時載入哈利波特英文版第一章、哈利波特中文版第一章</h5>
+            <img src="img/para2anchor/6.png" class="img-responsive" alt="Responsive image">
+            <h4>Step 3: 載入檔案後，依序</h4>
+            <ol>
+                <h5><li>填入錨點類別</li></h5>
+                <h5><li>填入錨點編號前綴 (選填)</li></h5>
+                <h5><li>儲存轉換後的檔案</li></h5>
+            </ol>
+            <img src="img/para2anchor/7.png" class="img-responsive" alt="Responsive image">
+        </div>
+    </div>
+</body>
+
+<script>
+    var files;
+
+    function parseFile(file) {
+        return function(event) {
+            // Parse string to XML DOM
+            var parser = new DOMParser();
+            var text = event.target.result;
+            var xmlDoc = parser.parseFromString(text, "text/xml");
+            var $xml = $(xmlDoc);
+    
+            var anchorClass = $("#anchorClass").val();
+            var prefix = $("#prefix").val();
+            if (prefix != null) {
+                prefix = prefix + "_";
+            }
+    
+    
+            /**
+             * Process file
+             */
+    
+            // Add anchor attribute to tag
+            var tagString = $xml.find("div.doc").attr("tag");
+            // HTML decode
+            var dom = new DOMParser().parseFromString(tagString, "text/html");
+            tagString = dom.body.textContent;
+    
+            var tagJson = JSON.parse(tagString);
+            tagJson[anchorClass] = {
+                buttonName: anchorClass,
+                color: "#333399",
+                status: "",
+                visible: true
+            }
+            tagString = JSON.stringify(tagJson);
+            $xml.find("div.doc").attr("tag", tagString);
+    
+            // Remove comment DOM
+            $xml.find("span.commentContainer").remove();
+    
+            $xml.find("span.passage").each(function(index) {
+                $(this).attr("class", "markup manual unsolved");
+                $(this).addClass(anchorClass);
+    
+                $(this).attr("type", anchorClass);
+                
+                var id = $(this).attr("id").replace(/passage/g, "");
+                $(this).removeAttr("id");
+                $(this).attr(anchorClass.toLowerCase()+"_id", prefix+id);
+            });
+    
+    
+            // Serialize XML DOM to string
+            var serializer = new XMLSerializer();
+            var xmlString = serializer.serializeToString(xmlDoc.documentElement);
+    
+            // Save as Blob
+            var blob = new Blob([xmlString], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, file.name);
+
+        }
+    }
+
+    function handleFileSelect(event) {
+        files = event.target.files; // FileList object
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+            output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
+                                    f.size, ' bytes, last modified: ',
+                                    f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                                    '</li>');
+        }
+        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    }
+
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+    $("#save").click(function() {
+        if (!$("#anchorClass").val()) {
+            $("#anchorClass").parent("div.form-group").addClass("has-error");
+            return;
+        }
+
+        for (var i = 0, file; file = files[i]; i++) {
+            var reader = new FileReader();
+            reader.onload = parseFile(file);
+            reader.readAsText(file);
+        }
+    });
+
+    // Remove warning whenever it is changed
+    $("#anchorClass").change(function() {
+        $("#anchorClass").parent("div.form-group").removeClass("has-error");
+    });
+</script>
+</html>
