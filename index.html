@@ -854,12 +854,33 @@ function displayQueryDocList(channelKey) {
         queryReadyCount = 0;
         layout.cleanQueryResult();
         $queryHash = [];
+        var queryReplace = new RegExp($("#query")[0].value, 'g');
         
         for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
-            result = docuSkyObj.channelBuffer[i].docList;
+            result = buildCorpus(docuSkyObj.channelBuffer[i].docList);
             //console.log(result);
             
-            for(var j in result) {
+            for (var corpusName in result) {
+            	for (var index in result[corpusName].corpus.yearBlocks){
+            		var title = result[corpusName].corpus.yearBlocks[index].title;
+
+            		if ($queryHash[title]==undefined) $queryHash[title] = [];
+            		if ($queryHash[title][result[corpusName].corpus.db]==undefined) $queryHash[title][result[corpusName].corpus.db] = [];
+
+            		var blocks = result[corpusName].corpus.yearBlocks[index].entrys;
+            		for (var index in blocks) {
+                    	var queryResult = blocks[index].content.match(queryReplace);
+                    	if (queryResult!=null) {
+                    		$queryHash[title][result[corpusName].corpus.db].push({num: queryResult.length, content:blocks[index].content, ID: blocks[index].anchor.split(' ')[1]});
+                    	}
+            		}
+
+            	}
+            }
+
+
+            
+            /*for(var j in result) {
 	            var title = result[j].docInfo.docFilename;
             
                 if( $queryHash[title] != undefined ) {
@@ -878,8 +899,9 @@ function displayQueryDocList(channelKey) {
                     $queryHash[title][result[j].docInfo.srcFilename] = [];
                     $queryHash[title][result[j].docInfo.srcFilename].push(result[j].docInfo);
                     $queryHash[title].title = title;
+                    
                 }
-            }
+            }*/
         }
 
         //console.log($queryHash);
@@ -894,9 +916,7 @@ function displayQueryDocList(channelKey) {
                 if($queryHash[i][j].constructor != Array().constructor)
                     continue;
                 //var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
-                //$(temp).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + entry.time + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
-                
-                $(temp).append("<strong> " + findDatabase(j) + "</strong>");
+              
                 
                 var groupList = document.createElement("lu");
                 groupList.className = "list-group";
@@ -906,13 +926,18 @@ function displayQueryDocList(channelKey) {
                         continue;
                     //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
 
-                    var queryReplace = new RegExp($("#query")[0].value, 'g');
-                    var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
-                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText'>" + $queryHash[i][j][k].docContentXml.replace("<Content>", "").replace("</Content>", "").replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
+                    $(groupList).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + $queryHash[i][j][k].ID + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
+
+                    $(groupList).append("<strong>  " + findDatabase(j) + " - " + $queryHash[i][j][k].ID + "</strong>");
+
+                    //var queryReplace = new RegExp($("#query")[0].value, 'g');
+                    //var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
+                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText " + $queryHash[i][j][k].ID + "'>" + $queryHash[i][j][k].content.replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
                     $(groupList).append(block);
-                    resultCount += queryResult.length;
+                    resultCount += $queryHash[i][j][k].num;
                 }
                 $(temp).append(groupList);
+                //console.log(groupList);
             }	
             $queryHash[i].count = resultCount;
         }
@@ -1214,7 +1239,6 @@ function moveAnchor(event) {
 	var $anchorArray = event.target.hash.split("%20"); // [0]: #, [1]: Udef anchor class, [2]: anchor id
 	var anchorClass = $anchorArray[1];
 	var target = new Target($anchorArray[1], $anchorArray[2], $anchorArray[3], $anchorArray);
-	
 			
 	//--	用年分 $("." + parentBlock.className.split(" ")[3]去抓
 	// var $blockArray = $("." + parentBlock.className.split(" ")[3] + ".block ");
@@ -1361,7 +1385,7 @@ function buildYearAnalysis() {
 	$("#yearListGroup").empty();				//--	reset
 	
 	for(var i in $queryHash) {
-		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + $queryHash[i].title + "(" + $queryHash[i].count + ")</a></h4></div></div>";
+		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + i + "(" + $queryHash[i].count + ")</a></h4></div></div>";
 		var headingId = "heading" + i;
 		var collapseId = "collapse" + i;
 		$("#yearListGroup").append(panel);
@@ -1369,27 +1393,31 @@ function buildYearAnalysis() {
 		$(panel).append("<div id='" + collapseId + "' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + headingId + "'>");
 		var collapse = $(panel).find("#" + collapseId);
 		
-		/*for(var j in $queryHash[i]) {
-			if($queryHash[i][j].constructor == String().constructor) continue;
-			
-			var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
-			var panelBody="<div class='panel-body'><a href='#' class='" + entry.time + "' onclick='moveAnchorForQuery(event)'>" + $queryHash[i][j].oriTimeString + "(" + $queryHash[i][j].length +  ")</a></div>";
-			
-			$(collapse).append(panelBody);
-		}*/
+		for(var j in $queryHash[i]) {
+
+			for (var k in $queryHash[i][j]) {
+				if($queryHash[i][j].constructor == String().constructor) continue;
+				
+				//var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
+				var panelBody="<div class='panel-body'><a href='# class='list-group-item queryText " + $queryHash[i][j][k].ID + "' " + "onclick='moveAnchorForQuery(event)'>" + findDatabase(j) + "-" + $queryHash[i][j][k].ID + "(" + $queryHash[i][j][k].num +  ")</a></div>";
+				
+				$(collapse).append(panelBody);
+			}
+		}
 		
 	}
 }
 
 //--    query result to book
 function moveAnchorForQuery(event) {
-	var target = $('#querySidebar').find("strong." + event.target.className.replace(/\s+/g,"."));
+	var target = $('#querySidebar').find('li.list-group-item.queryText.' + event.target.innerText.split('-')[1].split('(')[0]);
+
 	var h = target.offset().top;
 	$($("#querySidebar")[0]).animate({
 			scrollTop: $( $("#querySidebar")[0] ).scrollTop() + h - $($("#querySidebar")[0]).offset().top - 20
 		}, 600);
 	layout.cleanHitEntryColor();
-	layout.changeHitEntryColor($(target[0].nextElementSibling).find('li'));
+	layout.changeHitEntryColor($(target[0]));
 	
 }
 </script>
