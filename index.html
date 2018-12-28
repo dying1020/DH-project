@@ -148,6 +148,21 @@ function Layout() {
 			$(tagedArray[i]).attr("style", "background-color:white;");
 		}
 	};
+	//--	change the background color for current hit entry
+	this.changeCurrentHitEntryColor = function($targetArray) {
+		for(var i = 0; i < $targetArray.length; i ++) {
+			$($targetArray[i]).attr("style", "background-color:pink");
+			$($targetArray[i]).attr("class", $($targetArray[i]).attr("class") + " focus");
+		}
+	};
+	//--	clean the background color for current hit entry
+	this.cleanCurrentHitEntryColor = function() {
+		var tagedArray = $(".focus");
+		for(var i = 0; i < tagedArray.length; i ++) {
+			$(tagedArray[i]).removeClass("focus");
+			$(tagedArray[i]).attr("style", "background-color:white;");
+		}
+	};
 	//--	change the bottom red line for miss entry
 	this.changeMissEntryColorBottom = function( missEntry) {
 		$(missEntry).attr('style', 'color:rgb(0, 0, 0);border-bottom-color:red;border-bottom-width:5px');
@@ -1235,29 +1250,21 @@ function changeAnchor(span) {
 }
 
 function moveAnchor(event) {
-	//--	**********對應function**********
-	
 	var parentBlock = event.target.parentElement.parentElement;
-	// DH project
-	// var $timeArray = event.target.hash.split(" ");
-	var $anchorArray = event.target.hash.split("%20"); // [0]: #, [1]: anchor class, [2]: anchor id
-	var anchorClass = $anchorArray[1];
-	var target = new Target($anchorArray[1], $anchorArray[2], $anchorArray[3], $anchorArray);
-			
-	//--	用年分 $("." + parentBlock.className.split(" ")[3]去抓
-	// var $blockArray = $("." + parentBlock.className.split(" ")[3] + ".block ");
-	var jqAnchor = "." + event.target.className.replace(/ /g, ".");
-	$blockArray = $(jqAnchor);
+	var parentCorpus = parentBlock.parentElement;
+	var $hashArray = event.target.hash.split("%20"); // [0]: #, [1]: anchor class, [2]: anchor id
+	var anchorClass = $hashArray[1];
+	var anchorId = $hashArray[2];
+	var jqAnchor = anchorId === undefined ? `.${anchorClass}` : `.${anchorClass}.${anchorId}`;
+
+	var $entryArray = $(jqAnchor);
+	var $blockArray = $(jqAnchor);
+	var $corpusArray = $(".nav-sidebar");
 	// Move from entry to block
 	for (var i = 0; i < $blockArray.length; i++) {
 		$blockArray[i] = $blockArray[i].parentElement.parentElement;
 	}
 	
-	//--	欲移動的值 預設皆為零
-	var $anchorArray = [];
-	for(var i = 0; i < $blockArray.length; i ++) {
-		$anchorArray.push(0);
-	}
 	//--	消除上一次點選所標記的
 	layout.cleanHitEntryColor();
 	layout.cleanMissEntryColor();
@@ -1268,108 +1275,101 @@ function moveAnchor(event) {
 		return;
 	}
 	
-	
-	for(var i = 0; i < $blockArray.length; i ++) {
-		// Find anchor under block
-		var $temp = $($blockArray[i].lastElementChild).find(jqAnchor);
-		
-		//--	targetDay HIT
-		if($temp.length > 0) {
-			/**
-			 * @TODO If no use, remove follow block
-			 */
-			// if( target.getDay().split(".").length <= 5) {
-			// 	var $onlyArray = [];
-			// 	for(var k = 0; k < $temp.length; k ++) {
-			// 		if( $temp[k].className.split(" ").length == 5 ) {
-			// 			$onlyArray.push($temp[k]);
-			// 		}
-			// 	}
-			// 	if($onlyArray.length > 0) $temp = $onlyArray;
-			// }
-				
-			layout.changeHitEntryColor($temp);
-			if( $blockArray[i] == parentBlock ) { // Same block
-				var a = $(parentBlock.parentElement).offset().top;
-				var b = $($temp[0]).offset().top;
-				
-				if(a > b || (b - a) >  layout.height) {
-					$anchorArray[i] = $( $temp[0] ).offset().top;
-				} else {
-					$anchorArray[i] = 200 + $(parentBlock.parentElement).offset().top;
-				}
-			} else { // Different block
-				$anchorArray[i] = $($temp[0]).offset().top;
-			}
-		} 
-		//--	targetDay MISS
-		else {
-			var $monthHit = $( $blockArray[i].lastElementChild ).find(target.getMonth());
-			//--	find nearest Day
-			if($monthHit.length > 0) {
-				var flag = false;
-				for(var j = $monthHit.length - 1; j >= 0; j -- ) {
-					timeHref = $monthHit[j].hash.split(" ")[3].replace("d", "");
-					if( target.getDayNum() > timeHref) {
-						layout.changeMissEntryColorBottom($monthHit[j]);
-						
-						if( (j+1) >=  $monthHit.length) {
-							$anchorArray[i] = $($monthHit[$monthHit.length-1]).offset().top;
-							layout.changeMissEntryColorBottom($blockArray[i]);
-							
-						} else {
-							$anchorArray[i] = $($monthHit[j+1]).offset().top;
-						}
-						flag = true;
-						break;
-					}else if(j == 0 && flag == false) {
-						layout.changeMissEntryColorTop($monthHit[0]);
-						$anchorArray[i] = $($monthHit[0]).offset().top;
+	if ($entryArray.length > $corpusArray.length) {
+		var $focusArray = [];
+		var $anchorArray = [];
+		for (var i = 0; i < $corpusArray.length; i++) {
+			$anchorArray.push(0);
+		}
+
+		// layout.changeCurrentHitEntryColor([event.target]);
+
+		for (var i = 0; i < $corpusArray.length; i++) {
+			var $focusEntry = $($corpusArray[i]).find(`${jqAnchor}.focus`);
+			var $entryOfCorpus = $($corpusArray[i]).find(jqAnchor);
+			var isFirst = $focusEntry.length == 0 || 
+				$focusEntry[0] == $entryOfCorpus[$entryOfCorpus.length-1] ? true : false;
+			var flag = false;
+
+			for (var j = 0; j < $entryOfCorpus.length; j++) {
+				if ($entryOfCorpus[j] == event.target) { // Same block
+					var a = $(parentBlock.parentElement).offset().top;
+					var b = $($entryOfCorpus[j]).offset().top;
+					
+					if(a > b || (b - a) >  layout.height) {
+						$anchorArray[i] = $($entryOfCorpus[j]).offset().top;
+					} else {
+						$anchorArray[i] = 200 + $(parentBlock.parentElement).offset().top;
 					}
-				}
-			
-			} 
-			//--	find nearest Month
-			else {
-				var flag = false;
-				var $entryArray = $( $blockArray[i].lastElementChild ).find(target.getYear());
-				for(var j = $entryArray.length - 1; j >= 0; j -- ) {
-					timeHref = $entryArray[j].hash.split(" ")[2].replace("m", "");				
-					if( target.getMonthNum() > parseInt(timeHref) ) {
-						layout.changeMissEntryColorBottom($entryArray[j]);
-						
-						if( (j+1) >= $entryArray.length ) {
-							$anchorArray[i] = $( $entryArray[$entryArray.length-1] ).offset().top;
-							layout.changeMissEntryColorBottom($blockArray[i]);
-							
-						} else {
-							$anchorArray[i] = $($entryArray[j+1]).offset().top;
-						}
-						flag = true;
+					$focusArray.push($entryOfCorpus[j]);
+					break;
+				} else {
+					if (isFirst || flag) {
+						$anchorArray[i] = $($entryOfCorpus[j]).offset().top;
+						$focusArray.push($entryOfCorpus[j]);
 						break;
-						
-						
-					}else if(j == 0 && flag == false) {
-						layout.changeMissEntryColorTop($entryArray[0]);
-						$anchorArray[i] = $($entryArray[0]).offset().top;
+					} else if ($entryOfCorpus[j] == $focusEntry[0]) {
+						flag = true;
 					}
 				}
 			}
 		}
-	}
-	//--	移動到該位置
-	for(var i = 0; i < $anchorArray.length; i ++) {
-        //if(parentBlock.parentElement == $(".nav-sidebar")[i]) continue;
-        /**
-         * scrollTop()
-         * Get the current vertical position of the scroll bar 
-         * for the first element in the set of matched elements
-         * or set the vertical position of the scroll bar 
-         * for every matched element.
-         */
-		$($(".nav-sidebar")[i]).animate({
-			scrollTop: $( $(".nav-sidebar")[i] ).scrollTop() + $anchorArray[i] - $($(".nav-sidebar")[i]).offset().top -200
-        }, 600);
+
+		layout.cleanCurrentHitEntryColor();
+		layout.changeHitEntryColor($entryArray);
+		layout.changeCurrentHitEntryColor($focusArray);
+
+		//--	移動到該位置
+		for(var i = 0; i < $anchorArray.length; i ++) {
+			$($(".nav-sidebar")[i]).animate({
+				scrollTop: $( $(".nav-sidebar")[i] ).scrollTop() + $anchorArray[i] - $($(".nav-sidebar")[i]).offset().top -200
+			}, 600);
+		}
+	} else { // 1 to 1 mapping
+		layout.cleanCurrentHitEntryColor();
+
+		//--	欲移動的值 預設皆為零
+		var $anchorArray = [];
+		for(var i = 0; i < $blockArray.length; i ++) {
+			$anchorArray.push(0);
+		}
+
+		for(var i = 0; i < $blockArray.length; i ++) {
+			// Find anchor under block
+			var $temp = $($blockArray[i].lastElementChild).find(jqAnchor);
+			
+			//--	targetDay HIT
+			if($temp.length > 0) {
+				layout.changeHitEntryColor($temp);
+				if( $blockArray[i] == parentBlock ) { // Same block
+					var a = $(parentBlock.parentElement).offset().top;
+					var b = $($temp[0]).offset().top;
+					
+					if(a > b || (b - a) >  layout.height) {
+						$anchorArray[i] = $( $temp[0] ).offset().top;
+					} else {
+						$anchorArray[i] = 200 + $(parentBlock.parentElement).offset().top;
+					}
+				} else { // Different block
+					$anchorArray[i] = $($temp[0]).offset().top;
+				}
+			}
+		}
+	
+		//--	移動到該位置
+		for(var i = 0; i < $anchorArray.length; i ++) {
+			//if(parentBlock.parentElement == $(".nav-sidebar")[i]) continue;
+			/**
+			 * scrollTop()
+			 * Get the current vertical position of the scroll bar 
+			 * for the first element in the set of matched elements
+			 * or set the vertical position of the scroll bar 
+			 * for every matched element.
+			 */
+			$($(".nav-sidebar")[i]).animate({
+				scrollTop: $( $(".nav-sidebar")[i] ).scrollTop() + $anchorArray[i] - $($(".nav-sidebar")[i]).offset().top -200
+			}, 600);
+		}
 	}
 }
 
