@@ -145,7 +145,7 @@ function Layout() {
 		var tagedArray = $(".taged");
 		for(var i = 0; i < tagedArray.length; i ++) {
 			$(tagedArray[i]).removeClass("taged");
-			$(tagedArray[i]).attr("style", "background-color:white;color:rgb(0, 0, 0)");
+			$(tagedArray[i]).attr("style", "background-color:white;");
 		}
 	};
 	//--	change the bottom red line for miss entry
@@ -1240,7 +1240,7 @@ function moveAnchor(event) {
 	var parentBlock = event.target.parentElement.parentElement;
 	// DH project
 	// var $timeArray = event.target.hash.split(" ");
-	var $anchorArray = event.target.hash.split("%20"); // [0]: #, [1]: Udef anchor class, [2]: anchor id
+	var $anchorArray = event.target.hash.split("%20"); // [0]: #, [1]: anchor class, [2]: anchor id
 	var anchorClass = $anchorArray[1];
 	var target = new Target($anchorArray[1], $anchorArray[2], $anchorArray[3], $anchorArray);
 			
@@ -1262,7 +1262,7 @@ function moveAnchor(event) {
 	layout.cleanHitEntryColor();
 	layout.cleanMissEntryColor();
 
-	// Return if click on default anchor
+	// No action when click on default anchor
 	if (anchorClass == "Udef_default_anchor") {
 		layout.changeHitEntryColor([event.target]);
 		return;
