@@ -1040,7 +1040,11 @@ function buildCorpus(docList) {
             }
             content = content.trim();
             var entry = new Entry(entry_content);
-            if (entry.anchor!="Udef_default_anchor") anchorName = entry.anchor.split(' ')[0].split('_')[2];
+            
+            if (entry.anchor!="Udef_default_anchor") {
+            	anchorName = entry.anchor.split(' ')[0];
+            	anchorName = anchorName.substr(5, anchorName.length);
+            }
 
             if(corpus[corpusName].yearCandidate[entry.year]) {
                     corpus[corpusName].yearCandidate[entry.year] += 1;
