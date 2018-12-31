@@ -120,8 +120,13 @@ function Layout() {
 		$("#books").append("<label style='font-size:16px;margin-top:5px' class='checkbox-inline'><input type='checkbox' value='1' checked>" 
 		+ corpusName + "</label>");
 	};
+
 	this.addAnchorRadio = function(anchorsName) {
 		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='radio-inline'><input type='radio' name = 'anchor' value=" + anchorsName + " >" + anchorsName +	"</radio>");
+	}
+
+	this.addSearchTab = function(tabName) {
+		$("#searchTab").append("<button style='margin-top:7px;' type='button' class='btn btn-primary' onclick='showSearchResult(\"" + tabName + "\")'>" + tabName + "</button>");
 	}
 	
 	
@@ -426,7 +431,7 @@ function Saver() {
     //--    when corpus all ready, build it
     this.saverBuild = function() {
 		for(i in saver.completeArray) {
-			var corpus = buildCorpus(saver.completeArray[i]);
+			var corpus = buildCorpus(saver.completeArray[i], false);
 			$corpus.push(corpus);
 			corpusToBookcase(corpus);
 		}
@@ -568,8 +573,11 @@ function Saver() {
 								<h4>檢索結果 : </h4>
 								<div role="tabpanel" >
 								  <!-- Nav tabs -->
-									<ul class="nav nav-tabs" role="tablist">
-										<li role="presentation" class="active"><a href="#yearList" aria-controls="yearList" role="tab" data-toggle="tab">標題</a></li>
+									<ul class="nav nav-tabs" role="tablist"> 
+										<span id="searchTab">
+											
+										</span>>
+										<!--<li role="presentation" class="active"><a href="#yearList" aria-controls="yearList" role="tab" data-toggle="tab">標題</a></li> -->
 									</ul>
 									<div class="tab-content">
 										<div role='tabpanel' class='tab-pane active panel-body' id="yearList" >
@@ -676,7 +684,7 @@ function importFromDocuSkyCountSizeCallback(e) {
 
 function importFromDocuSkyCallback() {
     console.log(docuSkyObj.totalFound);
-    var corpusArray = buildCorpus(docuSkyObj.docList);
+    var corpusArray = buildCorpus(docuSkyObj.docList, false);
     var firstDatabase = ($database.length==0) ?true :false;
     var nowAnchor = (firstDatabase) ?null :searchNowAnchor();
     
@@ -690,6 +698,7 @@ function importFromDocuSkyCallback() {
 	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
 	    		$database.push(corpusArray[name].corpus.name);
 	    		layout.addBookCheckBox(corpusArray[name].corpus.name);
+	    		layout.addSearchTab(corpusArray[name].corpus.name);
 	    		$checked.push([]);
 	    		$checked[$checked.length-1].name = corpusArray[name].corpus.name;
 	    		$checked[$checked.length-1].checked = true;
@@ -702,6 +711,7 @@ function importFromDocuSkyCallback() {
 	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
 	    		$database.push(corpusArray[name].corpus.name);
 	    		layout.addBookCheckBox(corpusArray[name].corpus.name);
+	    		layout.addSearchTab(corpusArray[name].corpus.name);
 	    		$checked.push([]);
 	    		$checked[$checked.length-1].name = corpusArray[name].corpus.name;
 	    		$checked[$checked.length-1].checked = true;
@@ -784,11 +794,11 @@ $(document).ready(function() {
 		event.preventDefault(); 
 		var queries = [];
 		var nowAnchor = searchNowAnchor();
+		docuSkyObj.channelBuffer = {};
 		
 		for(var i = 0; i < $corpus.length; i ++) {
-			if (!ifDBDisplay($corpus[i].name)) continue;
 			if ($corpus[i].anchor!=nowAnchor) continue;
-			
+			console.log($corpus[i]);
 			queries.push( {channelKey: i+1,
 							target: 'USER',
 							corpus: $corpus[i].corpus,
@@ -867,29 +877,36 @@ function displayQueryDocList(channelKey) {
 
     if(queryReadyCount == $database.length) {		//--	all query result ready
         queryReadyCount = 0;
-        layout.cleanQueryResult();
         $queryHash = [];
-        var queryReplace = new RegExp($("#query")[0].value, 'g');
+        //console.log(docuSkyObj.channelBuffer);
+        
         
         for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
-            result = buildCorpus(docuSkyObj.channelBuffer[i].docList);
+        	//console.log(docuSkyObj.channelBuffer[i].docList);
+            result = buildCorpus(docuSkyObj.channelBuffer[i].docList, true);
             //console.log(result);
             
             for (var corpusName in result) {
+
+            	var tab = result[corpusName].corpus.name;
+            	//console.log(tab);
+            	if ($queryHash[tab]==undefined) $queryHash[tab] = [];
+
             	for (var index in result[corpusName].corpus.yearBlocks){
             		var title = result[corpusName].corpus.yearBlocks[index].title;
+            		if ($queryHash[tab][title]==undefined) $queryHash[tab][title] = [];
 
-            		if ($queryHash[title]==undefined) $queryHash[title] = [];
-            		if ($queryHash[title][result[corpusName].corpus.db]==undefined) $queryHash[title][result[corpusName].corpus.db] = [];
-
+            		var resultCount = 0;
             		var blocks = result[corpusName].corpus.yearBlocks[index].entrys;
-            		for (var index in blocks) {
-                    	var queryResult = blocks[index].content.match(queryReplace);
+            		for (var i in blocks) {
+            			var queryReplace = new RegExp($("#query")[0].value, 'g');
+                    	var queryResult = blocks[i].content.match(queryReplace);
                     	if (queryResult!=null) {
-                    		$queryHash[title][result[corpusName].corpus.db].push({num: queryResult.length, content:blocks[index].content, ID: blocks[index].anchor.split(' ')[1]});
+                    		resultCount += queryResult.length;
+                    		$queryHash[tab][title].push({num: queryResult.length, content:blocks[i].content, ID: blocks[i].anchor.split(' ')[1]});
                     	}
             		}
-
+            		$queryHash[tab][title].num = resultCount;
             	}
             }
 
@@ -920,45 +937,51 @@ function displayQueryDocList(channelKey) {
         }
 
         //console.log($queryHash);
-        
-        for(var i in $queryHash) {
-            var panelHeading = "<div class='panel panel-default queryBlock " + i + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + i + "</div><div class='panel-body'></div></div>";
-            $("#querySidebar").append(panelHeading);
-            var temp = $("#querySidebar").find("." + i + ".queryBlock")[0].lastElementChild;
-            var resultCount = 0;
-            
-            for(var j in $queryHash[i]) {
-                if($queryHash[i][j].constructor != Array().constructor)
-                    continue;
-                //var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
-              
-                
-                var groupList = document.createElement("lu");
-                groupList.className = "list-group";
 
-                for(var k in $queryHash[i][j]) {
-                    if($queryHash[i][j][k].constructor == String().constructor)
-                        continue;
-                    //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
-
-                    $(groupList).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + $queryHash[i][j][k].ID + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
-
-                    $(groupList).append("<strong>  " + findDatabase(j) + " - " + $queryHash[i][j][k].ID + "</strong>");
-
-                    //var queryReplace = new RegExp($("#query")[0].value, 'g');
-                    //var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
-                    var block = "<li style='margin-bottom:10px' class='list-group-item queryText " + $queryHash[i][j][k].ID + "'>" + $queryHash[i][j][k].content.replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
-                    $(groupList).append(block);
-                    resultCount += $queryHash[i][j][k].num;
-                }
-                $(temp).append(groupList);
-                //console.log(groupList);
-            }	
-            $queryHash[i].count = resultCount;
-        }
+        showSearchResult($database[0]);
         layout.showQueryRow();
-        buildYearAnalysis();
     }
+}
+
+
+function showSearchResult (dbName) {
+
+	layout.cleanQueryResult();
+
+	for(var title in $queryHash[dbName]) {
+        var panelHeading = "<div class='panel panel-default queryBlock " + title + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" + title + "</div><div class='panel-body'></div></div>";
+        $("#querySidebar").append(panelHeading);
+        var temp = $("#querySidebar").find("." + title + ".queryBlock")[0].lastElementChild;
+
+        var groupList = document.createElement("lu");
+        groupList.className = "list-group";
+        
+        for(var j in $queryHash[dbName][title]) {
+            if($queryHash[dbName][title][j].constructor != Object().constructor)
+                continue;
+            //var entry = new Entry( $queryHash[i][j].oriTimeString,  $queryHash[i][j][0].timeInfo);
+
+            //for(var k in $queryHash[i][j]) {
+                //if($queryHash[i][j][k].constructor == String().constructor)
+                   // continue;
+                //$(groupList).append("<div class='well well-sm' style='margin-bottom: 0px'>" + $queryHash[i][j][k].corpus + "</div>");
+
+            $(groupList).append("<button style='margin-bottom:10px' type='button' class='btn btn-primary btn-xs " + $queryHash[dbName][title][j].ID + "' aria-label='Left Align' onclick='layout.findResultInBook(event)'><<</button>");
+
+            $(groupList).append("<strong>  " + $queryHash[dbName][title][j].ID + "</strong>");
+
+                //var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
+            var queryReplace = new RegExp($("#query")[0].value, 'g');
+            var block = "<li style='margin-bottom:10px' class='list-group-item queryText " + $queryHash[dbName][title][j].ID + "'>" + $queryHash[dbName][title][j].content.replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
+            $(groupList).append(block);
+                
+        }
+        $("#querySidebar").find("." + title + ".queryBlock")[0].lastElementChild.append(groupList);
+        //console.log(groupList);
+        
+    }
+
+    buildYearAnalysis(dbName);
 }
 
 
@@ -997,7 +1020,7 @@ function corpusToBookcase(corpus) {
 }
 
 //--    build corpus by docusky docList
-function buildCorpus(docList) {
+function buildCorpus(docList, isSearch) {
 
 	// find all corpus in one database
 	var corpus = [];
@@ -1006,8 +1029,9 @@ function buildCorpus(docList) {
 	for (var i=0; i<docList.length; i++) {
 		var corpusName = docList[i].docInfo.corpus;
 		if (names.indexOf(corpusName) == -1){
+			var dbName = (isSearch) ?findDatabase(docList[i].docInfo.srcFilename) :docuSkyObj.db;
 			corpus[corpusName] = [];
-			corpus[corpusName].corpus = new Corpus(docuSkyObj.db, docList[i].docInfo.srcFilename, corpusName);
+			corpus[corpusName].corpus = new Corpus(dbName, docList[i].docInfo.srcFilename, corpusName);
 			var judge = parseTitle(docList[i].docInfo.docTitleXml);
 			corpus[corpusName].judge = parseTitle(docList[i].docInfo.docTitleXml); // 吃<title>這個tag
 			corpus[corpusName].yearCandidate = [];
@@ -1385,28 +1409,25 @@ function ObjectLength( object ) {
 };
 
 //--    build query result panel
-function buildYearAnalysis() {
+function buildYearAnalysis(dbName) {
 	$("#yearListGroup").empty();				//--	reset
 	
-	for(var i in $queryHash) {
-		var panel = "<div class='panel panel-default " + i + "'><div class='panel-heading' role='tab' id='heading" + i + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>" + i + "(" + $queryHash[i].count + ")</a></h4></div></div>";
-		var headingId = "heading" + i;
-		var collapseId = "collapse" + i;
+	for(var title in $queryHash[dbName]) {
+		var panel = "<div class='panel panel-default " + title + "'><div class='panel-heading' role='tab' id='heading" + title + "'><h4 class='panel-title'><a data-toggle='collapse' data-parent='#accordion' href='#collapse" + title + "' aria-expanded='false' aria-controls='collapse" + title + "'>" + title + "(" + $queryHash[dbName][title].num + ")</a></h4></div></div>";
+		var headingId = "heading" + title;
+		var collapseId = "collapse" + title;
 		$("#yearListGroup").append(panel);
-		panel = $("#yearListGroup").find("." + i)[0];
+		panel = $("#yearListGroup").find("." + title)[0];
 		$(panel).append("<div id='" + collapseId + "' class='panel-collapse collapse' role='tabpanel' aria-labelledby='" + headingId + "'>");
 		var collapse = $(panel).find("#" + collapseId);
 		
-		for(var j in $queryHash[i]) {
-
-			for (var k in $queryHash[i][j]) {
-				if($queryHash[i][j].constructor == String().constructor) continue;
-				
-				//var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
-				var panelBody="<div class='panel-body'><a href='# class='list-group-item queryText " + $queryHash[i][j][k].ID + "' " + "onclick='moveAnchorForQuery(event)'>" + findDatabase(j) + "-" + $queryHash[i][j][k].ID + "(" + $queryHash[i][j][k].num +  ")</a></div>";
-				
-				$(collapse).append(panelBody);
-			}
+		for(var j in $queryHash[dbName][title]) {
+			if($queryHash[dbName][title][j].constructor != Object().constructor) continue;
+			
+			//var entry = new Entry($queryHash[i][j].oriTimeString, $queryHash[i][j][0].timeInfo);
+			var panelBody="<div class='panel-body'><a href='# class='list-group-item queryText " + $queryHash[dbName][title][j].ID + "' " + "onclick='moveAnchorForQuery(event)'>" + $queryHash[dbName][title][j].ID + "(" + $queryHash[dbName][title][j].num +  ")</a></div>";
+			
+			$(collapse).append(panelBody);
 		}
 		
 	}
@@ -1414,7 +1435,7 @@ function buildYearAnalysis() {
 
 //--    query result to book
 function moveAnchorForQuery(event) {
-	var target = $('#querySidebar').find('li.list-group-item.queryText.' + event.target.innerText.split('-')[1].split('(')[0]);
+	var target = $('#querySidebar').find('li.list-group-item.queryText.' + event.target.innerText.split('(')[0]);
 
 	var h = target.offset().top;
 	$($("#querySidebar")[0]).animate({
