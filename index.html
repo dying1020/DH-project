@@ -85,19 +85,19 @@ function Layout() {
 	};
 	
 	//--	create book panel
-	/*this.createBookPanel = function(yearBlockTitle, yearBlockYear ) {
+	/*this.createBookPanel = function(docuBlockTitle, docuBlockYear ) {
 		var panelHeading = "<div class='panel panel-default block " 
-		+ yearBlockTitle + " " + yearBlockYear + "' name='" + yearBlockTitle 
+		+ docuBlockTitle + " " + docuBlockYear + "' name='" + docuBlockTitle 
 		+ "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" 
-		+ yearBlockTitle + "</div></div>";
+		+ docuBlockTitle + "</div></div>";
 			
 		return panelHeading;
 	};*/
-    this.createBookPanel = function(yearBlockTitle) {
+    this.createBookPanel = function(docuBlockTitle) {
         var panelHeading = "<div class='panel panel-default block " 
-        + yearBlockTitle + "' name='" + yearBlockTitle 
+        + docuBlockTitle + "' name='" + docuBlockTitle 
         + "'><div class='title panel-heading' style='background-color:lightsteelblue;font-size:16pt;'>" 
-        + yearBlockTitle + "</div></div>";
+        + docuBlockTitle + "</div></div>";
             
         return panelHeading;
     };
@@ -236,7 +236,7 @@ function Corpus(name, db, corpus) {
 	this.db = db;
 	this.corpus = corpus;
 	this.anchor = "";
-	this.yearBlocks = [];
+	this.docuBlocks = [];
 }
 //--	3.Entry Object : The unit of the stored context-entry.
 function Entry(content) {
@@ -286,8 +286,8 @@ function Entry(content) {
 
 	}*/
 }
-//--	4.YearBlock Object : The unit of the stored context-year.
-function YearBlock(title, entrys) {
+//--	4.DocuBlock Object : The unit of the stored context-year.
+function DocuBlock(title, entrys) {
 	this.title = title;
 	this.entrys = entrys;
 	//this.year = year;
@@ -894,12 +894,12 @@ function displayQueryDocList(channelKey) {
             	//console.log(tab);
             	if ($queryHash[tab]==undefined) $queryHash[tab] = [];
 
-            	for (var index in result[corpusName].corpus.yearBlocks){
-            		var title = result[corpusName].corpus.yearBlocks[index].title;
+            	for (var index in result[corpusName].corpus.docuBlocks){
+            		var title = result[corpusName].corpus.docuBlocks[index].title;
             		if ($queryHash[tab][title]==undefined) $queryHash[tab][title] = [];
 
             		var resultCount = 0;
-            		var blocks = result[corpusName].corpus.yearBlocks[index].entrys;
+            		var blocks = result[corpusName].corpus.docuBlocks[index].entrys;
             		for (var i in blocks) {
 
             			var queryReplace = new RegExp($("#query")[0].value, 'g');
@@ -1011,14 +1011,14 @@ function corpusToBookcase(corpus) {
 	$("#bookContainer").append(layout.createBookContainer(corpus.name));
 	var box = $($("#bookContainer")[0].lastChild.lastChild);
 
-	for(i = 0; i < corpus.yearBlocks.length; i ++) {
+	for(i = 0; i < corpus.docuBlocks.length; i ++) {
 		
-		box.append( layout.createBookPanel(corpus.yearBlocks[i].title) );
-		var temp = box.find("div." + corpus.yearBlocks[i].title.replace(/([.#])/, '\\$1'))[0];
+		box.append( layout.createBookPanel(corpus.docuBlocks[i].title) );
+		var temp = box.find("div." + corpus.docuBlocks[i].title.replace(/([.#])/, '\\$1'))[0];
 		var groupList = layout.createBookListGroup();
 		
-		for(var j = 0; j < corpus.yearBlocks[i].entrys.length; j ++) {
-			$(groupList).append(layout.createBookListGroupItem(corpus.yearBlocks[i].entrys[j].anchor, corpus.yearBlocks[i].entrys[j].content));
+		for(var j = 0; j < corpus.docuBlocks[i].entrys.length; j ++) {
+			$(groupList).append(layout.createBookListGroupItem(corpus.docuBlocks[i].entrys[j].anchor, corpus.docuBlocks[i].entrys[j].content));
 		}
 		$(temp).append(groupList);
 	}
@@ -1102,9 +1102,9 @@ function buildCorpus(docList, isSearch) {
                
             var doctitle = parseTitle(docList[i].docInfo.docTitleXml);
             if(doctitle != corpus[corpusName].judge) {
-                var yearBlock = new YearBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
+                var docuBlock = new DocuBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
 
-                corpus[corpusName].corpus.yearBlocks.push(yearBlock);
+                corpus[corpusName].corpus.docuBlocks.push(docuBlock);
                 corpus[corpusName].judge = doctitle;
                 
                 corpus[corpusName].temp = [];
@@ -1120,8 +1120,8 @@ function buildCorpus(docList, isSearch) {
 
 	// For last block
 	for (var corpusName in corpus) {
-		var yearBlock = new YearBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
-		corpus[corpusName].corpus.yearBlocks.push(yearBlock);
+		var docuBlock = new DocuBlock(corpus[corpusName].judge.replace("<DocTitle>", "").replace("</DocTitle>", ""), corpus[corpusName].temp);
+		corpus[corpusName].corpus.docuBlocks.push(docuBlock);
 	}
 
     return corpus;
