@@ -689,7 +689,12 @@ function importFromDocuSkyCallback() {
     var corpusArray = buildCorpus(docuSkyObj.docList, false);
     var firstDatabase = ($database.length==0) ?true :false;
     var nowAnchor = (firstDatabase) ?null :searchNowAnchor();
-    
+	for(var name in corpusArray){
+		if ($database.indexOf(corpusArray[name].corpus.name) != -1) {
+			return;
+		}
+		break;
+	}
     for (var name in corpusArray) {
     	$corpus.push(corpusArray[name].corpus);
     	var anchorName = corpusArray[name].corpus.anchor;
