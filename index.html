@@ -110,7 +110,7 @@ function Layout() {
 	};
 	
 	this.createBookListGroupItem = function(anchor, entryContent) {
-		var enter = new RegExp("/", 'g');
+		var enter = new RegExp("///", 'g');
 		entryContent = entryContent.replace(enter, "<br>");
 		var groupItem = "<a href='# " + anchor + "' class='list-group-item text " + anchor 
 		+ "' onclick='moveAnchor(event)' >" + entryContent + "</a>";
@@ -123,8 +123,8 @@ function Layout() {
 		+ corpusName + "</label>");
 	};
 
-	this.addAnchorRadio = function(anchorsName) {
-		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='radio-inline'><input type='radio' name = 'anchor' value=" + anchorsName + " >" + anchorsName +	"</radio>");
+	this.addAnchorRadio = function(anchorsName, checked) {
+		$("#anchors").append("<radio style='font-size:16px;margin-top:5px' class='radio-inline'><input type='radio' name = 'anchor' value=" + anchorsName + " " + checked + ">" + anchorsName +	"</radio>");
 	}
 
 	this.addSearchTab = function(tabName) {
@@ -710,10 +710,11 @@ function importFromDocuSkyCallback() {
 	    		$checked[$checked.length-1].name = corpusArray[name].corpus.name;
 	    		$checked[$checked.length-1].checked = true;
 	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = true;
+	    		layout.addAnchorRadio(anchorName, "checked");
 	    	} else {
 	    		$anchorOfBookcase[$anchorOfBookcase.length-1].checked = false;
+	    		layout.addAnchorRadio(anchorName, "");
 	    	}
-			layout.addAnchorRadio(anchorName);
 	    } else {
 	    	if ($database.indexOf(corpusArray[name].corpus.name) == -1) {
 	    		$database.push(corpusArray[name].corpus.name);
@@ -731,6 +732,7 @@ function importFromDocuSkyCallback() {
 	    }
     	corpusToBookcase(corpusArray[name].corpus);
     }
+    //console.log($corpus);
 }
 
 var setDocuSkyRef = function() {
@@ -805,19 +807,22 @@ $(document).ready(function() {
 		
 		for(var i = 0; i < $corpus.length; i ++) {
 			if ($corpus[i].anchor!=nowAnchor) continue;
+			displayQueryDocList(i);
 			//console.log($corpus[i]);
-			queries.push( {channelKey: i+1,
+			/*queries.push( {channelKey: i+1,
 							target: 'USER',
 							corpus: $corpus[i].corpus,
 							db: $corpus[i].name,
 							pageSize : 5000,
 							query: $("#query")[0].value} 
-			);
+			);*/
 		}
-		for (var i=0; i < queries.length; i++) {
+		/*for (var i=0; i < queries.length; i++) {
             var query = queries[i];
             docuSkyObj.getQueryResultDocuments(query, event, displayQueryDocList);
-        }
+        }*/
+        showSearchResult($database[0]);
+        layout.showQueryRow();
 	});
 
     //--    bookcaseInner list button
@@ -879,32 +884,32 @@ function ifDBDisplay(dbName) {
 	}
 }               
 
-function displayQueryDocList(channelKey) {
-    queryReadyCount ++;
+function displayQueryDocList(corpusIndex) {
+   /* queryReadyCount ++;
 
     if(queryReadyCount == $database.length) {		//--	all query result ready
         queryReadyCount = 0;
         $queryHash = [];
-        //console.log(docuSkyObj.channelBuffer);
+        console.log(docuSkyObj.channelBuffer);
         
         
         for(var i in docuSkyObj.channelBuffer){								//--	build query result Array
         	//console.log(docuSkyObj.channelBuffer[i].docList);
-            result = buildCorpus(docuSkyObj.channelBuffer[i].docList, true);
+            result = buildCorpus(docuSkyObj.channelBuffer[i].docList, true);*/
             //console.log(result);
             
-            for (var corpusName in result) {
-
-            	var tab = result[corpusName].corpus.name;
+            //for (var corpusName in $corpus) {
+            	$queryHash = [];
+            	var tab = $corpus[corpusIndex].name;
             	//console.log(tab);
             	if ($queryHash[tab]==undefined) $queryHash[tab] = [];
 
-            	for (var index in result[corpusName].corpus.docuBlocks){
-            		var title = result[corpusName].corpus.docuBlocks[index].title;
+            	for (var index in $corpus[corpusIndex].docuBlocks){
+            		var title = $corpus[corpusIndex].docuBlocks[index].title;
             		if ($queryHash[tab][title]==undefined) $queryHash[tab][title] = [];
 
             		var resultCount = 0;
-            		var blocks = result[corpusName].corpus.docuBlocks[index].entrys;
+            		var blocks = $corpus[corpusIndex].docuBlocks[index].entrys;
             		for (var i in blocks) {
 
             			var queryReplace = new RegExp($("#query")[0].value, 'g');
@@ -919,9 +924,12 @@ function displayQueryDocList(channelKey) {
                     		$queryHash[tab][title].push({num: queryResult.length, content:blocks[i].content, ID:anchorID, pos:pos });
                     	}
             		}
-            		$queryHash[tab][title].num = resultCount;
+
+            		if (resultCount==0) delete $queryHash[tab][title];
+            		else $queryHash[tab][title].num = resultCount;
+            		
             	}
-            }
+            //}
 
 
             
@@ -947,13 +955,12 @@ function displayQueryDocList(channelKey) {
                     
                 }
             }*/
-        }
+        //}
 
         //console.log($queryHash);
 
-        showSearchResult($database[0]);
-        layout.showQueryRow();
-    }
+        
+    //}
 }
 
 
@@ -1094,7 +1101,7 @@ function buildCorpus(docList, isSearch) {
             content = content.trim();
             var entry = new Entry(entry_content);
             
-            if (entry.anchor!="Udef_default_anchor") {
+            if (entry.anchor.split(' ')[0]!="Udef_default_anchor") {
             	anchorName = entry.anchor.split(' ')[0];
             	anchorName = anchorName.substr(5, anchorName.length);
             }
