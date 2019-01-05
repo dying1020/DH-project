@@ -111,11 +111,11 @@ var ClsDocuskyGetDbCorpusDocumentsSimpleUI = function(param) {     // class (con
                           urlScheme: 'http',
                           // DH project
                           // urlHost: location.hostname,
-                          urlHost: 'docusky.digital.ntu.edu.tw',
+                          urlHost: 'docusky.org.tw',
                           urlPort: location.port,
                           // DH project
                           // urlPath: urlPath,
-                          urlPath: '/docusky/WebApi',
+                          urlPath: '/DocuSky/webApi',
                           description: 'Current'};
       me.providerList.push(curProvider);
       setUrlApiPath(me, curProvider);
