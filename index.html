@@ -801,9 +801,9 @@ $(document).ready(function() {
 	//--    query button
 	$('body').on('submit', '#searchBar', function(event) {
 		event.preventDefault(); 
-		var queries = [];
+		//var queries = [];
 		var nowAnchor = searchNowAnchor();
-		docuSkyObj.channelBuffer = {};
+		$queryHash = [];
 		
 		for(var i = 0; i < $corpus.length; i ++) {
 			if ($corpus[i].anchor!=nowAnchor) continue;
@@ -899,13 +899,15 @@ function displayQueryDocList(corpusIndex) {
             //console.log(result);
             
             //for (var corpusName in $corpus) {
-            	$queryHash = [];
+            	//console.log(corpusIndex);
+            	
             	var tab = $corpus[corpusIndex].name;
             	//console.log(tab);
             	if ($queryHash[tab]==undefined) $queryHash[tab] = [];
 
             	for (var index in $corpus[corpusIndex].docuBlocks){
             		var title = $corpus[corpusIndex].docuBlocks[index].title;
+            		//console.log(title);
             		if ($queryHash[tab][title]==undefined) $queryHash[tab][title] = [];
 
             		var resultCount = 0;
@@ -915,6 +917,7 @@ function displayQueryDocList(corpusIndex) {
             			var queryReplace = new RegExp($("#query")[0].value, 'g');
                     	var queryResult = blocks[i].content.match(queryReplace);
                     	if (queryResult!=null) {
+                    		//console.log(blocks[i]);
                     		
                     		var pos = (Number(index)+1).toString() + "-block-" + (Number(i)+1).toString();
                     		var anchorID = blocks[i].anchor.split(' ')[1];
@@ -930,7 +933,7 @@ function displayQueryDocList(corpusIndex) {
             		
             	}
             //}
-
+            //console.log($queryHash);
 
             
             /*for(var j in result) {
