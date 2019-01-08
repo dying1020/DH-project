@@ -994,8 +994,9 @@ function showSearchResult (dbName) {
             $(groupList).append("<strong>  " + $queryHash[dbName][title][j].pos + "   " + $queryHash[dbName][title][j].ID + "</strong>");
 
                 //var queryResult = $queryHash[i][j][k].docContentXml.match(queryReplace);
+            var enter = new RegExp("///", 'g');
             var queryReplace = new RegExp($("#query")[0].value, 'g');
-            var block = "<li style='margin-bottom:10px' class='list-group-item queryText " + $queryHash[dbName][title][j].pos + "'>" + $queryHash[dbName][title][j].content.replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ); + "</li>";
+            var block = "<li style='margin-bottom:10px' class='list-group-item queryText " + $queryHash[dbName][title][j].pos + "'>" + $queryHash[dbName][title][j].content.replace(queryReplace,"<kbd style='background-color: #5F5F3F'>" + $("#query")[0].value + "</kbd>" ).replace(enter, "<br>"); + "</li>";
             $(groupList).append(block);
                 
         }
