@@ -1307,7 +1307,7 @@ function moveAnchor(event) {
 
 	var $entryArray = $(jqAnchor);
 	var $blockArray = $(jqAnchor);
-	var $corpusArray = $(".nav-sidebar");
+	var $corpusArray = $("div#bookContainer .nav-sidebar");
 	// Move from entry to block
 	for (var i = 0; i < $blockArray.length; i++) {
 		$blockArray[i] = $blockArray[i].parentElement.parentElement;
@@ -1330,17 +1330,16 @@ function moveAnchor(event) {
 			$anchorArray.push(0);
 		}
 
-		// layout.changeCurrentHitEntryColor([event.target]);
-
 		for (var i = 0; i < $corpusArray.length; i++) {
 			var $focusEntry = $($corpusArray[i]).find(`${jqAnchor}.focus`);
 			var $entryOfCorpus = $($corpusArray[i]).find(jqAnchor);
+			// Haven't click this anchor yet || Focus on last entry in this corpus, return to first entry
 			var isFirst = $focusEntry.length == 0 || 
 				$focusEntry[0] == $entryOfCorpus[$entryOfCorpus.length-1] ? true : false;
 			var flag = false;
 
 			for (var j = 0; j < $entryOfCorpus.length; j++) {
-				if ($entryOfCorpus[j] == event.target) { // Same block
+				if ($entryOfCorpus[j] == event.target) { // Same entry
 					var a = $(parentBlock.parentElement).offset().top;
 					var b = $($entryOfCorpus[j]).offset().top;
 					
@@ -1352,7 +1351,7 @@ function moveAnchor(event) {
 					$focusArray.push($entryOfCorpus[j]);
 					break;
 				} else {
-					if (isFirst || flag) {
+					if ((isFirst || flag) && $corpusArray[i] != parentCorpus) {
 						$anchorArray[i] = $($entryOfCorpus[j]).offset().top;
 						$focusArray.push($entryOfCorpus[j]);
 						break;
