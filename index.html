@@ -252,57 +252,11 @@ function Entry(content) {
 		this.anchor = "Udef_default_anchor";
         this.content = content;
     }
-    // this.content = content;
-    // this.time = this.anchor;
-
-    //this.time = getTime(timeInfo);
-    //this.year = timeInfo.dateAdYear; // 以後要拿掉
-    //this.year = 1999;
-	/*
-	function getTime(timeInfo) {
-		
-		if(timeInfo.timeseqNotAfter != undefined && timeInfo.timeseqNotBefore != undefined ) {
-			year = (timeInfo.timeseqNumber.substr(0, timeInfo.timeseqNumber.length -4) - 100000);
-			
-			//year = timeInfo.dateAdYear;
-			day = timeInfo.dateAdDate.substr( timeInfo.dateAdDate.length - 2 );
-			monthStart = parseInt( timeInfo.timeseqNotBefore.substr(timeInfo.timeseqNotBefore.length - 4, 2) );
-			monthEnd = parseInt( timeInfo.timeseqNotAfter.substr(timeInfo.timeseqNotAfter.length - 4, 2) );
-			result = year + " ";
-			
-			for(var i = monthStart; i <= monthEnd; i ++) {
-				if(i < 10) result += "m0" + i + " d" + day + " ";
-				else result += "m" + i + " d" + day + " ";
-			}
-			return result.slice(0, -1);
-		} else {
-			//year = timeInfo.dateAdDate.substr(0, timeInfo.timeseqNumber.length - 4);
-			//year = Math.abs(100000-year);
-			year = timeInfo.dateAdYear;
-			month = timeInfo.dateAdDate.substr(timeInfo.dateAdDate.length - 4, 2);
-			day = timeInfo.dateAdDate.substr(timeInfo.dateAdDate.length - 2);
-			return year + " m" + month + " d" + day;
-		}
-
-	}*/
 }
 //--	4.DocuBlock Object : The unit of the stored context-year.
 function DocuBlock(title, entrys) {
 	this.title = title;
 	this.entrys = entrys;
-	//this.year = year;
-	/*
-	getYear(this.year, this.title);
-	
-	
-	function getYear(year, title) {
-		if( $yearList[year] == undefined) {
-			$yearList[year] = [title];
-		} else {
-			if($yearList[year].indexOf(title) == -1 ) $yearList[year].push(title);
-		}
-	}
-	*/
 }
 //--	5.Target Object : Uesd to present the entry that has been find to the same date.
 function Target(year, month, day, $timeArray) {
@@ -1065,19 +1019,12 @@ function buildCorpus(docList, isSearch) {
 		}
 	}
 
-	//var corpus = new Corpus(docuSkyObj.db, docList[0].docInfo.srcFilename, docList[0].docInfo.corpus);
-   // var judge = docList[0].docInfo.docTitleXml; // 吃<title>這個tag
-	//var yearCandidate = [];
-	
-	//var temp = [];
-
     for(var i = 0; i < docList.length; i ++) {
 
     	var corpusName = docList[i].docInfo.corpus;
     	var anchorName = "";
     	
     //--    有沒有專屬的time
-        //var content = docList[i].docInfo.docContentXml.replace("<Content>", "").replace("</Content>", "").replace("<Paragraph>", "").replace("</Paragraph>", "").replace("<Content>", "").replace("</Content>", "").replace("\n", "");
         var content = docList[i].docInfo.docContentXml;
         content = content.replace(/<Content>/g, "").replace(/<Paragraph>/g, "");
         content = content.split("</Content>").join("");
